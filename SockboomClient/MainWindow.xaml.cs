@@ -37,7 +37,7 @@ namespace SockboomClient
             this.SetWindowSize(width: 1366, 750);
             _user = user;
 
-
+            #region 背景、样式与标题栏
             // 设置云母或亚克力背景
             backdrop = new Helpers.SystemBackdrop(this);
             backdrop.TrySetMica(fallbackToAcrylic: true);
@@ -141,5 +141,7 @@ namespace SockboomClient
                 return new RectInt32(X, Y, Width, Height);
             }
         }
+        #endregion
     }
+
 }
