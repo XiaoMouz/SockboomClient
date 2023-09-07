@@ -194,7 +194,7 @@ namespace SockboomClient
             var Token = PasswordInput.Password;
             SetElementStatus(false);
 
-            // 检查邮箱和密码是否为空
+            // 检查Token是否为空
             if (string.IsNullOrEmpty(Token))
             {
                 ShowDialog("登录失败", "你未填写 TOKEN (在密码一栏中填写 Token 即可，邮箱留空）");
