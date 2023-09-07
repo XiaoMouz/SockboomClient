@@ -16,15 +16,12 @@ using System.Collections.Generic;
 using SockboomClient.Model;
 using Microsoft.UI.Xaml.Controls;
 using SockboomClient.Componse;
-
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using static Vanara.PInvoke.Kernel32.REASON_CONTEXT;
 
 namespace SockboomClient
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// 登录窗口
     /// </summary>
     public sealed partial class LoginWindow : Window
     {
@@ -39,7 +36,7 @@ namespace SockboomClient
         public LoginWindow()
         {
             this.InitializeComponent();
-            this.SetWindowSize(500, 250);
+            this.SetWindowSize(500, 300);
 
             #region 背景、样式与标题栏
             // 设置云母或亚克力背景
@@ -83,7 +80,6 @@ namespace SockboomClient
                 var scale = (float)User32.GetDpiForWindow(hwnd) / 96;
                 // 48 这个值是应用标题栏的高度，不是唯一的，根据自己的 UI 设计而定
                 titleBar.SetDragRectangles(new RectInt32[] { new RectInt32((int)(48 * scale), 0, 10000, (int)(48 * scale)) });
-
             }
             else
             {
@@ -103,6 +99,7 @@ namespace SockboomClient
                 var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
                 ApplicationData.Current.LocalSettings.Values["LoginWindowRect"] = rect.Value;
             }
+
         }
 
         /// <summary>
@@ -153,12 +150,12 @@ namespace SockboomClient
             var KeepLogin = KeepLoginCheckBox.IsChecked;
             var Email = LoginInput.Text;
             var Password = PasswordInput.Password;
-            SetElementStatu(false);
+            SetElementStatus(false);
             // 检查邮箱和密码是否为空
             if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
             {
                 ShowDialog("登录失败", "邮箱或密码不能为空");
-                SetElementStatu(true);
+                SetElementStatus(true);
                 return;
             }
             // 获取用户 Token
@@ -172,7 +169,7 @@ namespace SockboomClient
 
             if (!Result.Success)
             {
-                SetElementStatu(true);
+                SetElementStatus(true);
                 // 登录失败
                 ShowDialog("登录失败", "邮箱或密码错误:" + Result.Code +"/" + Result.Message);
                 return;
@@ -190,12 +187,52 @@ namespace SockboomClient
             new MainWindow(user.Data).Activate();
             this.Close();
         }
+
+        private async void LoginByTokenButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var KeepLogin = KeepLoginCheckBox.IsChecked;
+            var Token = PasswordInput.Password;
+            SetElementStatus(false);
+
+            // 检查邮箱和密码是否为空
+            if (string.IsNullOrEmpty(Token))
+            {
+                ShowDialog("登录失败", "你未填写 TOKEN (在密码一栏中填写 Token 即可，邮箱留空）");
+                SetElementStatus(true);
+                return;
+            }
+
+            var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", Token } });
+
+            // 登录失败
+            if (!user.Success)
+            {
+                SetElementStatus(true);
+                ShowDialog("登录失败", "Token 有误:" + user.Code + "/" + user.Message);
+                return;
+            }
+
+            if (KeepLogin == true)
+            {
+                // 保存登录信息与是否自动登录
+                ApplicationData.Current.LocalSettings.Values["AutoLogin"] = "true";
+                ApplicationData.Current.LocalSettings.Values["Token"] = Token;
+            }
+
+            
+            this.Hide();
+            new MainWindow(user.Data).Activate();
+            this.Close();
+
+
+        }
+
         /// <summary>
         /// 在 false 时停用所有元素编辑功能, true 时启用
         /// false 时设置 ProgressRing 启用, 修改 Login Button 按钮文本, true 反之
         /// </summary>
         /// <param name="status"></param>
-        private void SetElementStatu(bool status)
+        private void SetElementStatus(bool status)
         {
             if (status)
             {
