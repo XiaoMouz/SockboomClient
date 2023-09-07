@@ -31,7 +31,11 @@
   <ItemGroup>
     <None Remove="Componse\Dialog.xaml" />
     <None Remove="LoginWindow.xaml" />
-    <None Remove="Views\AccountInfo.xaml" />
+    <None Remove="Views\AccountInfoPage.xaml" />
+    <None Remove="Views\ClashConfigPage.xaml" />
+    <None Remove="Views\RechargePage.xaml" />
+    <None Remove="Views\SettingsPage.xaml" />
+    <None Remove="Views\ShopPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,13 +52,37 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\ShopPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\RechargePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\ClashConfigPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\SettingsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
     <Page Update="LoginWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\AccountInfo.xaml">
+    <Page Update="Views\AccountInfoPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

@@ -13,17 +13,16 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-namespace SockboomClient.Componse
+namespace SockboomClient.Views
 {
     /// <summary>
-    /// 对话框内容
+    ///用户信息主体页面
     /// </summary>
-    public sealed partial class Dialog : Page
+    public sealed partial class AccountInfoPage : Page
     {
-        public Dialog(string content)
+        public AccountInfoPage()
         {
             this.InitializeComponent();
-            Content.Text = content;
         }
     }
 }

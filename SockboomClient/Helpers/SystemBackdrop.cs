@@ -9,6 +9,9 @@ using WinRT;
 
 namespace SockboomClient.Helpers;
 #nullable enable
+/// <summary>
+/// 背景
+/// </summary>
 public class SystemBackdrop
 {
 
