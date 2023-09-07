@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
 using SockboomClient.Client;
 using SockboomClient.Model;
+using SockboomClient.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,16 +24,18 @@ namespace SockboomClient
 
     public partial class App : Application
     {
+        private SharedViewModel _vm;
         public App()
         {
             this.InitializeComponent();
+            _vm = SharedViewModel.GetInstance();
         }
 
         protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
             // 尝试获取自动登录信息
             var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (localSettings.Values.TryGetValue("AutoLogin", out object AutoLoginInfo))
+            if (localSettings.Values.TryGetValue("AutoLogin", out object AutoLoginInfo)&&false)
             {
 
                 var AutoLogin = AutoLoginInfo  as string;
@@ -46,7 +49,10 @@ namespace SockboomClient
                     });
                     if (Result.Success)
                     {
-                        m_window = new MainWindow(Result.Data);
+                        var r = Result.Data;
+                        r.Token = Token;
+                        _vm.UserInfo = r;
+                        m_window = new MainWindow();
                     }
                     else
                     {

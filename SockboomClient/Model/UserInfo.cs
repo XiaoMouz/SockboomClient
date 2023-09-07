@@ -12,20 +12,7 @@ namespace SockboomClient.Model
         /// <summary>
         /// 用户 Token
         /// </summary>
-        public string Token
-        {
-            get
-            {
-                return Token;
-            }
-            set
-            {
-                if(Token == null || Token == " ")
-                {
-                    Token = value;
-                }
-            }
-        }
+        public string Token;
 
         /// <summary>
         /// 用户等级
