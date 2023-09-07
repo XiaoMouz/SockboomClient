@@ -19,6 +19,7 @@ using SockboomClient.Componse;
 using static Vanara.PInvoke.Kernel32.REASON_CONTEXT;
 using SockboomClient.ViewModel;
 using Newtonsoft.Json.Linq;
+using SockboomClient.Config;
 
 namespace SockboomClient
 {
@@ -253,8 +254,8 @@ namespace SockboomClient
             if (keeplogin == true)
             {
                 // 保存登录信息与是否自动登录
-                ApplicationData.Current.LocalSettings.Values["AutoLogin"] = "true";
-                ApplicationData.Current.LocalSettings.Values["Token"] = token;
+                Settings.AutoLogin = true;
+                Settings.Token = token;
             }
         }
     }

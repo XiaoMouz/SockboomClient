@@ -1,4 +1,5 @@
 ﻿  using Newtonsoft.Json;
+using SockboomClient.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,17 @@ namespace SockboomClient.Model
         /// <summary>
         /// 用户 Token
         /// </summary>
-        public string Token;
+        public string Token
+        {
+            get
+            {
+                return Token;
+            }
+            set {
+                Settings.Token = value;
+                Token = value;
+            }
+        }
 
         /// <summary>
         /// 用户等级
