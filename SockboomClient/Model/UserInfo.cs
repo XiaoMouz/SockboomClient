@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿  using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,19 +38,19 @@ namespace SockboomClient.Model
         /// 用户当日使用流量 (单位: bit)
         /// </summary>
         [JsonProperty("used_today")]
-        public int UsedToday;
+        public long UsedToday;
 
         /// <summary>
         /// 用户共使用流量 (单位: bit)
         /// </summary>
         [JsonProperty("used_total")]
-        public int UsedTotal;
+        public long UsedTotal;
 
         /// <summary>
         /// 用户剩余流量 (单位: bit)
         /// </summary>
         [JsonProperty("unused")]
-        public int Unused;
+        public long Unused;
 
         /// <summary>
         /// 用户流量有效期 (单位: 天)
@@ -62,6 +62,6 @@ namespace SockboomClient.Model
         /// 用户账户余额
         /// </summary>
         [JsonProperty("money")]
-        public int Money;
+        public double Money;
     }
 }
