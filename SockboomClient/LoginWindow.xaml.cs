@@ -30,6 +30,8 @@ namespace SockboomClient
     {
         private IntPtr hwnd;
 
+        private Ex _err;
+
         private AppWindow appWindow;
 
         private AppWindowTitleBar titleBar;
@@ -43,13 +45,14 @@ namespace SockboomClient
             this.InitializeComponent();
             InitWindowFancy();
         }
-
+        
         public LoginWindow(string title,string info)
         {
             this.InitializeComponent();
             InitWindowFancy();
-            ShowDialog(title, info);
+            _err = new Ex(title,info);
         }   
+
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             // 保存窗口状态
@@ -61,7 +64,7 @@ namespace SockboomClient
                 var s = appWindow.Size;
                 var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
                 ApplicationData.Current.LocalSettings.Values["LoginWindowRect"] = rect.Value;
-            }
+            } 
 
         }
 
@@ -241,19 +244,7 @@ namespace SockboomClient
             dialog.PrimaryButtonText = "好";
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.Content = new Dialog(message);
-            // 定义 Loaded 事件处理程序
-            RoutedEventHandler loadedHandler = null;
-            loadedHandler = async (sender, e) =>
-            {
-                // 在加载完成时移除事件处理程序
-                dialog.Loaded -= loadedHandler;
-
-                // 使用 await 等待窗口加载完成后再显示对话框
-                var result = await dialog.ShowAsync();
-            };
-
-            // 将事件处理程序与对话框的 Loaded 事件关联
-            dialog.Loaded += loadedHandler;
+            await dialog.ShowAsync();
         }
 
         private async void GetUserAndSaveToVM(bool? keeplogin, string token)
@@ -281,5 +272,25 @@ namespace SockboomClient
                 Settings.Token = token;
             }
         }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_err != null)
+            {
+                ShowDialog(_err.title, _err.info);
+            }
+        }
+        private class Ex
+        {
+            internal string title;
+            internal string info;
+
+            public Ex(string title, string info)
+            {
+                this.title = title;
+                this.info = info;
+            }
+        }
     }
+    
 }
