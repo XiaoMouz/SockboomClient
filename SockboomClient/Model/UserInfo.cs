@@ -1,4 +1,5 @@
 ﻿  using Newtonsoft.Json;
+using SockboomClient.Client;
 using SockboomClient.Config;
 using System;
 using System.Collections.Generic;
@@ -62,5 +63,22 @@ namespace SockboomClient.Model
         /// </summary>
         [JsonProperty("money")]
         public double Money;
+
+        public async void UpdateUserInfo()
+        {
+            var info = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
+            {
+                { "token",token }
+            });
+            if (info.Success)
+            {
+                var n = info.Data;
+                Level = n.Level;
+                UsedToday = n.UsedToday; 
+                UsedTotal = n.UsedTotal;
+                Unused = n.Unused; 
+                Days = n.Days;
+            }
+        }
     }
 }
