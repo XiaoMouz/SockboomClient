@@ -45,24 +45,33 @@ namespace SockboomClient.ViewModel
         /// <summary>
         /// 请求更新用户信息
         /// </summary>
-        public async void RequestUpdateUserInfo()
+        public async Task<bool> RequestUpdateUserInfo() 
         {
-            if(UserInfo == null)
+            try
             {
-                return;
-            }
-            if(UserInfo.Token == null)
+                if (UserInfo == null)
+                {
+                    return false;
+                }
+                if (UserInfo.Token == null)
+                {
+                    return false;
+                }
+                var Result = await UserInfo.UpdateUserInfo();
+                if (Result.Success)
+                {
+                    UserInfo = Result.Data;
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }catch (Exception)
             {
-                return;
+                return false;
             }
-            var Result = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
-                    {
-                        { "token", UserInfo.Token }
-                    });
-            if (Result.Success)
-            {
-                UserInfo = Result.Data;
-            }
+            
         }
     }
 }

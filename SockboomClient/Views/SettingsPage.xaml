@@ -82,7 +82,21 @@
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE895;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <Button Content="同步" />
+                    <Button Name="SyncButton" Click="SyncButton_OnClick">
+                        <StackPanel Orientation="Horizontal">
+                            <ProgressRing
+                                Name="SyncProgressRing"
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,5,0"
+                                IsActive="True"
+                                Visibility="Collapsed" />
+                            <TextBlock
+                                Name="SyncButtonText"
+                                Margin="0,0"
+                                Text="同步" />
+                        </StackPanel>
+                    </Button>
                 </toolkit:SettingsCard>
                 <toolkit:SettingsCard Description="登出您的 Sockboom 账户, 但本地数据依旧保留" Header="登出">
                     <toolkit:SettingsCard.HeaderIcon>

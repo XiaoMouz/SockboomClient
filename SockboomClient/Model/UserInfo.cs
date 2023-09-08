@@ -64,21 +64,13 @@ namespace SockboomClient.Model
         [JsonProperty("money")]
         public double Money;
 
-        public async void UpdateUserInfo()
+        public async Task<HttpResult<UserInfo>> UpdateUserInfo()
         {
             var info = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
             {
                 { "token",token }
             });
-            if (info.Success)
-            {
-                var n = info.Data;
-                Level = n.Level;
-                UsedToday = n.UsedToday; 
-                UsedTotal = n.UsedTotal;
-                Unused = n.Unused; 
-                Days = n.Days;
-            }
+            return info;
         }
     }
 }

@@ -9,17 +9,27 @@ using SockboomClient.Common;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
+using SockboomClient.ViewModel;
+using SockboomClient.Componse;
+using System.Threading;
 
 namespace SockboomClient.Views
 {
     public sealed partial class SettingsPage : Page
     {
+        SharedViewModel _vm;
         public SettingsPage()
         {
             this.InitializeComponent();
             Loaded += OnSettingsPageLoaded;
+            _vm = SharedViewModel.GetInstance();
         }
 
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
             Settings.ClearLoginSettings();
@@ -28,6 +38,11 @@ namespace SockboomClient.Views
             app.Exit();
         }
 
+        /// <summary>
+        /// 设置页初始化
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSettingsPageLoaded(object sender, RoutedEventArgs e)
         {
             // Get right now theme
@@ -46,6 +61,11 @@ namespace SockboomClient.Views
             }
         }
 
+        /// <summary>
+        /// 主题修改
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ThemeMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
@@ -82,6 +102,48 @@ namespace SockboomClient.Views
                 case ElementTheme.Dark: Settings.Theme = ApplicationTheme.Dark; break;
                 default: Settings.Theme = (ApplicationTheme)2; break;
             }
+        }
+
+        /// <summary>
+        /// 显示对话框
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="message"></param>
+        private async void ShowDialog(string title, string message)
+        {
+            ContentDialog dialog = new ContentDialog();
+
+            dialog.XamlRoot = this.Content.XamlRoot;
+            dialog.Style = Application.Current.Resources["DefaultContentDialogStyle"] as Style;
+            dialog.Title = title;
+            dialog.PrimaryButtonText = "好";
+            dialog.DefaultButton = ContentDialogButton.Primary;
+            dialog.Content = new Dialog(message);
+            await dialog.ShowAsync();
+        }
+
+        /// <summary>
+        /// 同步
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void SyncButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SyncButton.IsEnabled = false;
+            SyncProgressRing.Visibility = Visibility.Visible;
+            SyncButtonText.Text = "同步中";
+            if (await _vm.RequestUpdateUserInfo())
+            {
+                ShowDialog("同步成功", "您的账户信息已同步");
+            }
+            else
+            {
+                ShowDialog("同步失败", "请检查网络或测试与服务器连通性");
+            }
+            
+            SyncButton.IsEnabled = true;
+            SyncProgressRing.Visibility = Visibility.Collapsed;
+            SyncButtonText.Text = "同步";
         }
 
     }
