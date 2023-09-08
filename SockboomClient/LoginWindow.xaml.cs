@@ -41,9 +41,35 @@ namespace SockboomClient
         public LoginWindow()
         {
             this.InitializeComponent();
+            InitWindowFancy();
+        }
+
+        public LoginWindow(string title,string info)
+        {
+            this.InitializeComponent();
+            InitWindowFancy();
+            ShowDialog(title, info);
+        }
+        private void MainWindow_Closed(object sender, WindowEventArgs args)
+        {
+            // 保存窗口状态
+            var wpl = new User32.WINDOWPLACEMENT();
+            if (User32.GetWindowPlacement(hwnd, ref wpl))
+            {
+                ApplicationData.Current.LocalSettings.Values["IsLoginWindowMaximum"] = wpl.showCmd == ShowWindowCommand.SW_MAXIMIZE;
+                var p = appWindow.Position;
+                var s = appWindow.Size;
+                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
+                ApplicationData.Current.LocalSettings.Values["LoginWindowRect"] = rect.Value;
+            }
+
+        }
+
+        #region 背景、样式与标题栏
+        private void InitWindowFancy()
+        {
             this.SetWindowSize(500, 300);
             _vm = SharedViewModel.GetInstance();
-            #region 背景、样式与标题栏
             // 设置云母或亚克力背景
             backdrop = new Helpers.SystemBackdrop(this);
             backdrop.TrySetMica(fallbackToAcrylic: true);
@@ -68,7 +94,7 @@ namespace SockboomClient
                 // 若窗口在屏幕范围之内
                 if (rect.Left > 0 && rect.Top > 0 && rect.Right < area.WorkArea.Width && rect.Bottom < area.WorkArea.Height)
                 {
-                    appWindow.MoveAndResize(rect.ToRectInt32());  
+                    appWindow.MoveAndResize(rect.ToRectInt32());
                 }
             }
 
@@ -91,20 +117,6 @@ namespace SockboomClient
                 ExtendsContentIntoTitleBar = true;
                 SetTitleBar(AppTitleBar);
             }
-        }
-        private void MainWindow_Closed(object sender, WindowEventArgs args)
-        {
-            // 保存窗口状态
-            var wpl = new User32.WINDOWPLACEMENT();
-            if (User32.GetWindowPlacement(hwnd, ref wpl))
-            {
-                ApplicationData.Current.LocalSettings.Values["IsLoginWindowMaximum"] = wpl.showCmd == ShowWindowCommand.SW_MAXIMIZE;
-                var p = appWindow.Position;
-                var s = appWindow.Size;
-                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
-                ApplicationData.Current.LocalSettings.Values["LoginWindowRect"] = rect.Value;
-            }
-
         }
 
         /// <summary>
@@ -148,7 +160,6 @@ namespace SockboomClient
             }
         }
         #endregion
-
 
         private async void LoginButton_OnClick(object sender, RoutedEventArgs e)
         {

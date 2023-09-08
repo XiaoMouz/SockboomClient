@@ -38,17 +38,38 @@ namespace SockboomClient
         public MainWindow()
         {
             this.InitializeComponent();
+            InitWindowFancy();
+        }
+
+        #region 背景、样式与标题栏 与 最小窗口限制
+        private void MainWindow_Closed(object sender, WindowEventArgs args)
+        {
+            // 保存窗口状态
+            var wpl = new Vanara.PInvoke.User32.WINDOWPLACEMENT();
+            if (Vanara.PInvoke.User32.GetWindowPlacement(hwnd, ref wpl))
+            {
+                ApplicationData.Current.LocalSettings.Values["IsMainWindowMaximum"] = wpl.showCmd == Vanara.PInvoke.ShowWindowCommand.SW_MAXIMIZE;
+                var p = appWindow.Position;
+                var s = appWindow.Size;
+                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
+                ApplicationData.Current.LocalSettings.Values["MainWindowRect"] = rect.Value;
+            }
+        }
+
+        
+        private void InitWindowFancy()
+        {
             this.SetWindowSize(width: 1366, 750);
             _vm = SharedViewModel.GetInstance();
             _user = _vm.UserInfo;
             // 设置第一屏
-            navigationList.SelectedItem = FindMenuItemByTag(navigationList,"ProxyState");
+            navigationList.SelectedItem = FindMenuItemByTag(navigationList, "ProxyState");
             contentFrame.Navigate(typeof(ClashConfigPage));
-            #region 背景、样式与标题栏 与 最小窗口限制
+            
             //最小窗口限制
             var manager = WinUIEx.WindowManager.Get(this);
             manager.PersistenceId = "MainWindowPersistanceId";
-            manager.MinWidth = 657 ;
+            manager.MinWidth = 657;
             manager.MinHeight = 480;
             manager.Backdrop = new WinUIEx.MicaSystemBackdrop();
 
@@ -101,20 +122,6 @@ namespace SockboomClient
                 SetTitleBar(AppTitleBar);
             }
         }
-        private void MainWindow_Closed(object sender, WindowEventArgs args)
-        {
-            // 保存窗口状态
-            var wpl = new Vanara.PInvoke.User32.WINDOWPLACEMENT();
-            if (Vanara.PInvoke.User32.GetWindowPlacement(hwnd, ref wpl))
-            {
-                ApplicationData.Current.LocalSettings.Values["IsMainWindowMaximum"] = wpl.showCmd == Vanara.PInvoke.ShowWindowCommand.SW_MAXIMIZE;
-                var p = appWindow.Position;
-                var s = appWindow.Size;
-                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
-                ApplicationData.Current.LocalSettings.Values["MainWindowRect"] = rect.Value;
-            }
-        }
-
         /// <summary>
         /// RectInt32 和 ulong 相互转换
         /// </summary>

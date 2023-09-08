@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "SockboomClient (Package)", "SockboomClient (Package)\SockboomClient (Package).wapproj", "{7D1F37A0-73EC-4352-9872-5491E6EEC589}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SockboomClient", "SockboomClient\SockboomClient.csproj", "{BF883CD1-F367-412B-B562-36EBFE852305}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SockboomClient", "SockboomClient\SockboomClient.csproj", "{BF883CD1-F367-412B-B562-36EBFE852305}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
