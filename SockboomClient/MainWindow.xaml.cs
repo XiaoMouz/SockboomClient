@@ -39,6 +39,7 @@ namespace SockboomClient
         {
             this.InitializeComponent();
             InitWindowFancy();
+            
         }
 
         #region 背景、样式与标题栏 与 最小窗口限制
@@ -121,7 +122,7 @@ namespace SockboomClient
                 ExtendsContentIntoTitleBar = true;
                 SetTitleBar(AppTitleBar);
             }
-        }
+        }  
         /// <summary>
         /// RectInt32 和 ulong 相互转换
         /// </summary>

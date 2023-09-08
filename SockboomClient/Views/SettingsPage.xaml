@@ -54,7 +54,7 @@
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE790;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <ComboBox x:Name="themeMode" AutomationProperties.AutomationId="themeModeComboBox">
+                    <ComboBox x:Name="themeMode" SelectionChanged="ThemeMode_SelectionChanged">
                         <ComboBoxItem Content="亮色" Tag="Light" />
                         <ComboBoxItem Content="暗色" Tag="Dark" />
                         <ComboBoxItem Content="跟随系统" Tag="Default" />
@@ -88,7 +88,7 @@
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE8D8;" />
                     </toolkit:SettingsCard.HeaderIcon>
-                    <Button Content="登出" />
+                    <Button Click="LogoutButton_Click" Content="登出" />
                 </toolkit:SettingsCard>
 
                 <!--  About  -->

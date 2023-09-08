@@ -49,7 +49,7 @@ namespace SockboomClient
             this.InitializeComponent();
             InitWindowFancy();
             ShowDialog(title, info);
-        }
+        }   
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             // 保存窗口状态
@@ -241,7 +241,19 @@ namespace SockboomClient
             dialog.PrimaryButtonText = "好";
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.Content = new Dialog(message);
-            var result = await dialog.ShowAsync();
+            // 定义 Loaded 事件处理程序
+            RoutedEventHandler loadedHandler = null;
+            loadedHandler = async (sender, e) =>
+            {
+                // 在加载完成时移除事件处理程序
+                dialog.Loaded -= loadedHandler;
+
+                // 使用 await 等待窗口加载完成后再显示对话框
+                var result = await dialog.ShowAsync();
+            };
+
+            // 将事件处理程序与对话框的 Loaded 事件关联
+            dialog.Loaded += loadedHandler;
         }
 
         private async void GetUserAndSaveToVM(bool? keeplogin, string token)

@@ -31,6 +31,7 @@ namespace SockboomClient
         {
             this.InitializeComponent();
             _vm = SharedViewModel.GetInstance();
+            App.Current.RequestedTheme = Settings.Theme;
         }
 
         protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
@@ -60,7 +61,7 @@ namespace SockboomClient
                 }
                 catch (Exception ex)
                 {
-                    m_window = new LoginWindow("发生错误","自动登录失败:"+ex.Message);
+                    m_window = new LoginWindow("发生错误", "自动登录失败:" + ex.Message);
                 }
             }
             else
