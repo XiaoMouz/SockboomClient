@@ -62,5 +62,15 @@ namespace SockboomClient
             }
             m_window.Activate();
         }
+
+        /// <summary>
+        /// 返回登录窗口
+        /// </summary>
+        public void BackToLoginWindow()
+        {
+            m_window.Close();
+            m_window = new LoginWindow();
+            m_window.Activate();
+        }
     }
 }

@@ -54,5 +54,14 @@ namespace SockboomClient.Config
                 ApplicationData.Current.LocalSettings.Values["Token"] = value;
             }
         }
+
+        public static void ClearLoginSettings()
+        {
+            
+            ApplicationData.Current.LocalSettings.Values["AutoLogin"] = "false";
+            ApplicationData.Current.LocalSettings.Values["Token"] = null;
+            ApplicationData.Current.LocalSettings.Values.Remove("AutoLogin");
+            ApplicationData.Current.LocalSettings.Values.Remove("Token");
+        }
     }
 }

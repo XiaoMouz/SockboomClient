@@ -10,5 +10,6 @@
 
     <Grid>
         <TextBlock FontSize="64">Settings</TextBlock>
+        <Button Click="LogoutButton_Click" Content="Logout" />
     </Grid>
 </Page>
