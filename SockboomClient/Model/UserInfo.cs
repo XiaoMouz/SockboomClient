@@ -10,6 +10,7 @@ namespace SockboomClient.Model
 {
     public class UserInfo
     {
+        private string token;
         /// <summary>
         /// 用户 Token
         /// </summary>
@@ -17,11 +18,11 @@ namespace SockboomClient.Model
         {
             get
             {
-                return Token;
+                return token;
             }
             set {
                 Settings.Token = value;
-                Token = value;
+                token = value;
             }
         }
 
