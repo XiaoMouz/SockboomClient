@@ -7,7 +7,9 @@ using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Microsoft.UI.Xaml.Shapes;
 using SockboomClient.Client;
+using SockboomClient.Config;
 using SockboomClient.Model;
+using SockboomClient.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,40 +25,35 @@ namespace SockboomClient
 
     public partial class App : Application
     {
+        private SharedViewModel _vm;
+        private Window m_window;
         public App()
         {
             this.InitializeComponent();
+            _vm = SharedViewModel.GetInstance();
         }
 
         protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            // 尝试获取自动登录信息
-            var localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
-            if (localSettings.Values.TryGetValue("AutoLogin", out object AutoLoginInfo))
+            if (Settings.AutoLogin)
             {
 
-                var AutoLogin = AutoLoginInfo  as string;
-                if (AutoLogin.Equals("true"))
-                {
-                    localSettings.Values.TryGetValue("Token", out object AutoLoginToken);
-                    var Token =  AutoLoginToken as string;
-                    var Result = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
+                var Token = Settings.Token;
+                var Result = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
                     {
                         { "token", Token }
                     });
-                    if (Result.Success)
-                    {
-                        m_window = new MainWindow(Result.Data);
-                    }
-                    else
-                    {
-                        m_window = new LoginWindow();
-                        
-                    }
+                if (Result.Success)
+                {
+                    var r = Result.Data;
+                    r.Token = Token;
+                    _vm.UserInfo = r;
+                    m_window = new MainWindow();
                 }
                 else
                 {
                     m_window = new LoginWindow();
+
                 }
             }
             else
@@ -65,7 +62,5 @@ namespace SockboomClient
             }
             m_window.Activate();
         }
-
-        public Window m_window;
     }
 }

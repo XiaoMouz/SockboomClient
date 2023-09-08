@@ -1,4 +1,5 @@
 ﻿  using Newtonsoft.Json;
+using SockboomClient.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,9 @@ namespace SockboomClient.Model
             {
                 return Token;
             }
-            set
-            {
-                if(Token == null || Token == " ")
-                {
-                    Token = value;
-                }
+            set {
+                Settings.Token = value;
+                Token = value;
             }
         }
 

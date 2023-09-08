@@ -17,6 +17,9 @@ using SockboomClient.Model;
 using Microsoft.UI.Xaml.Controls;
 using SockboomClient.Componse;
 using static Vanara.PInvoke.Kernel32.REASON_CONTEXT;
+using SockboomClient.ViewModel;
+using Newtonsoft.Json.Linq;
+using SockboomClient.Config;
 
 namespace SockboomClient
 {
@@ -33,11 +36,13 @@ namespace SockboomClient
 
         private Helpers.SystemBackdrop backdrop;
 
+        private SharedViewModel _vm;
+
         public LoginWindow()
         {
             this.InitializeComponent();
             this.SetWindowSize(500, 300);
-
+            _vm = SharedViewModel.GetInstance();
             #region 背景、样式与标题栏
             // 设置云母或亚克力背景
             backdrop = new Helpers.SystemBackdrop(this);
@@ -147,10 +152,10 @@ namespace SockboomClient
 
         private async void LoginButton_OnClick(object sender, RoutedEventArgs e)
         {
+            SetElementStatus(false);
             var KeepLogin = KeepLoginCheckBox.IsChecked;
             var Email = LoginInput.Text;
             var Password = PasswordInput.Password;
-            SetElementStatus(false);
             // 检查邮箱和密码是否为空
             if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
             {
@@ -164,35 +169,15 @@ namespace SockboomClient
                 { "email" , Email },
                 { "passwd", Password }
             });
-            // 前端显示处理
             
-
-            if (!Result.Success)
-            {
-                SetElementStatus(true);
-                // 登录失败
-                ShowDialog("登录失败", "邮箱或密码错误:" + Result.Code +"/" + Result.Message);
-                return;
-            }
-
-            if (KeepLogin == true)
-            {
-                // 保存登录信息与是否自动登录
-                ApplicationData.Current.LocalSettings.Values["AutoLogin"] = "true";
-                ApplicationData.Current.LocalSettings.Values["Token"] = Result.Token;
-            }
-
-            var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", Result.Token } });
-            this.Hide();
-            new MainWindow(user.Data).Activate();
-            this.Close();
+            GetUserAndSaveToVM(KeepLogin, Result.Token);
         }
 
-        private async void LoginByTokenButton_OnClick(object sender, RoutedEventArgs e)
+        private void LoginByTokenButton_OnClick(object sender, RoutedEventArgs e)
         {
+            SetElementStatus(false);
             var KeepLogin = KeepLoginCheckBox.IsChecked;
             var Token = PasswordInput.Password;
-            SetElementStatus(false);
 
             // 检查Token是否为空
             if (string.IsNullOrEmpty(Token))
@@ -202,28 +187,7 @@ namespace SockboomClient
                 return;
             }
 
-            var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", Token } });
-
-            // 登录失败
-            if (!user.Success)
-            {
-                SetElementStatus(true);
-                ShowDialog("登录失败", "Token 有误:" + user.Code + "/" + user.Message);
-                return;
-            }
-
-            if (KeepLogin == true)
-            {
-                // 保存登录信息与是否自动登录
-                ApplicationData.Current.LocalSettings.Values["AutoLogin"] = "true";
-                ApplicationData.Current.LocalSettings.Values["Token"] = Token;
-            }
-
-            
-            this.Hide();
-            new MainWindow(user.Data).Activate();
-            this.Close();
-
+            GetUserAndSaveToVM(KeepLogin, Token);
 
         }
 
@@ -267,6 +231,32 @@ namespace SockboomClient
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.Content = new Dialog(message);
             var result = await dialog.ShowAsync();
+        }
+
+        private async void GetUserAndSaveToVM(bool? keeplogin, string token)
+        {
+            var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", token } });
+            if (user.Success)
+            {
+                // 保存用户信息
+                _vm.UserInfo = user.Data;
+                _vm.UserInfo.Token = token;
+                this.Hide();
+                new MainWindow().Activate();
+                this.Close();
+            }
+            else
+            {
+                // 登录失败
+                ShowDialog("登录失败", "账户密码或Token有误:" + user.Code + "/" + user.Message);
+                SetElementStatus(true);
+            }
+            if (keeplogin == true)
+            {
+                // 保存登录信息与是否自动登录
+                Settings.AutoLogin = true;
+                Settings.Token = token;
+            }
         }
     }
 }

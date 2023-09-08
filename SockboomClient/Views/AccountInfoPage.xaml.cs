@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using SockboomClient.Model;
+using SockboomClient.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,9 +22,12 @@ namespace SockboomClient.Views
     /// </summary>
     public sealed partial class AccountInfoPage : Page
     {
+        private SharedViewModel _vm;
         public AccountInfoPage()
         {
             this.InitializeComponent();
+            _vm = SharedViewModel.GetInstance();
+            TestText.Text = _vm.UserInfo.Money.ToString();
         }
     }
 }
