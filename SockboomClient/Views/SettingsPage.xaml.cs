@@ -34,7 +34,8 @@ namespace SockboomClient.Views
         {
             Settings.ClearLoginSettings();
             var app = (App)Application.Current;
-            app.BackToLoginWindow();
+            //app.BackToLoginWindow(); tpdo: function bug
+            app.Exit();
         }
     }
 }
