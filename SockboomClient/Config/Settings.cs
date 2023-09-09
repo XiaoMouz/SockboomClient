@@ -71,7 +71,8 @@ namespace SockboomClient.Config
                 }
                 else
                 {
-                    return (0);
+                    ApplicationData.Current.LocalSettings.Values["Theme"] = "Default";
+                    return Win32.GetUserSystemTheme() ? ApplicationTheme.Dark : ApplicationTheme.Light;
                 }
             }
             set

@@ -13,7 +13,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-namespace SockboomClient.Componse
+namespace SockboomClient.Compose
 {
     /// <summary>
     /// 对话框内容

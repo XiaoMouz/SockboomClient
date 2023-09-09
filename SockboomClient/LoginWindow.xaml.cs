@@ -15,7 +15,7 @@ using SockboomClient.Client;
 using System.Collections.Generic;
 using SockboomClient.Model;
 using Microsoft.UI.Xaml.Controls;
-using SockboomClient.Componse;
+using SockboomClient.Compose;
 using static Vanara.PInvoke.Kernel32.REASON_CONTEXT;
 using SockboomClient.ViewModel;
 using Newtonsoft.Json.Linq;

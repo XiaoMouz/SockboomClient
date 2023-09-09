@@ -29,7 +29,7 @@
     <WarningLevel>7</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Componse\Dialog.xaml" />
+    <None Remove="Compose\Dialog.xaml" />
     <None Remove="LoginWindow.xaml" />
     <None Remove="Views\AccountInfoPage.xaml" />
     <None Remove="Views\ClashConfigPage.xaml" />

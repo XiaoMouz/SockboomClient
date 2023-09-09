@@ -10,7 +10,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
 using SockboomClient.ViewModel;
-using SockboomClient.Componse;
+using SockboomClient.Compose;
 using System.Threading;
 
 namespace SockboomClient.Views
