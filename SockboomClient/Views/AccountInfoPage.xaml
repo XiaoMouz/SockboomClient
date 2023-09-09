@@ -5,10 +5,86 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:SockboomClient.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     Background="{ThemeResource ControlAltFillColorTransparentBrush}"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock Name="TestText" />
+    <Page.Resources>
+        <!--  These styles can be referenced to create a consistent SettingsPage layout  -->
+
+        <!--  Spacing between cards  -->
+        <x:Double x:Key="CardSpacing">3</x:Double>
+
+        <!--  Style (inc. the correct spacing) of a section header  -->
+        <Style
+            x:Key="SectionHeaderTextBlockStyle"
+            BasedOn="{StaticResource BodyStrongTextBlockStyle}"
+            TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Margin" Value="1,29,0,5" />
+            </Style.Setters>
+        </Style>
+    </Page.Resources>
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="PageHeader"
+            Margin="36,24,36,0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="用户信息" />
+
+        <ScrollViewer
+            x:Name="contentSV"
+            Grid.Row="1"
+            Padding="36,0,36,0"
+            IsTabStop="False"
+            UseSystemFocusVisuals="False"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromVerticalOffset="50" />
+                        <RepositionThemeTransition IsStaggeringEnabled="False" />
+                    </TransitionCollection>
+                </Grid.ChildrenTransitions>
+                <StackPanel Grid.Column="0" Spacing="{StaticResource CardSpacing}">
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="信息" />
+                    <StackPanel>
+                        <PersonPicture ProfilePicture="https://learn.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png" />
+                        <TextBlock>您好</TextBlock>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>用户等级:</TextBlock>
+                            <TextBlock Text="{Binding Level}" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Spacing="{StaticResource CardSpacing}">
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="状态" />
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="余" />
+                            <TextBlock Text="{Binding UnusedByString}" />
+                            <TextBlock Text="/" />
+                            <TextBlock Text="共" />
+                            <TextBlock Text="{Binding TotalByString}" />
+                        </StackPanel>
+
+                        <ProgressBar Name="TotalTrafficBar" Width="Auto" />
+                        <TextBlock Name="Test" />
+                    </StackPanel>
+
+                </StackPanel>
+
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

@@ -5,6 +5,7 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using SockboomClient.Debuger;
 using SockboomClient.Model;
 using SockboomClient.ViewModel;
 using System;
@@ -27,7 +28,15 @@ namespace SockboomClient.Views
         {
             this.InitializeComponent();
             _vm = SharedViewModel.GetInstance();
-            TestText.Text = _vm.UserInfo.Money.ToString();
+            DataContext = _vm.UserInfo;
+
+            // 设置流量占比条
+            double infoPercent = (double)_vm.UserInfo.UsedTotal / (double)_vm.UserInfo.Total;
+            infoPercent = infoPercent * 100;
+            if(infoPercent >= 100) { infoPercent = 100; }
+            TotalTrafficBar.Value = (int)infoPercent;
+            if (infoPercent > 80 && infoPercent != 100) TotalTrafficBar.ShowPaused = true;
+            if (infoPercent == 100) TotalTrafficBar.ShowError = true;
         }
     }
 }
