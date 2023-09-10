@@ -10,8 +10,6 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!--  These styles can be referenced to create a consistent SettingsPage layout  -->
-
         <!--  Spacing between cards  -->
         <x:Double x:Key="CardSpacing">3</x:Double>
 
@@ -23,6 +21,13 @@
             <Style.Setters>
                 <Setter Property="Margin" Value="1,29,0,5" />
             </Style.Setters>
+        </Style>
+
+        <Style x:Key="PanelStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Spacing" Value="{StaticResource CardSpacing}" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}" />
         </Style>
     </Page.Resources>
     <Grid x:Name="RootGrid">
@@ -55,35 +60,71 @@
                         <RepositionThemeTransition IsStaggeringEnabled="False" />
                     </TransitionCollection>
                 </Grid.ChildrenTransitions>
+
                 <StackPanel Grid.Column="0" Spacing="{StaticResource CardSpacing}">
                     <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="信息" />
-                    <StackPanel>
-                        <PersonPicture ProfilePicture="https://learn.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png" />
-                        <TextBlock>您好</TextBlock>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock>用户等级:</TextBlock>
-                            <TextBlock Text="{Binding Level}" />
+                    <Border
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <StackPanel Style="{StaticResource PanelStyle}">
+                            <PersonPicture
+                                Width="128"
+                                Height="128"
+                                ProfilePicture="https://learn.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png" />
+                            <TextBlock>您好</TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>用户等级:</TextBlock>
+                                <TextBlock Text="{Binding Level}" />
+                            </StackPanel>
                         </StackPanel>
-
-                    </StackPanel>
-                </StackPanel>
-                <StackPanel Grid.Column="1" Spacing="{StaticResource CardSpacing}">
-                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="状态" />
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="余" />
-                            <TextBlock Text="{Binding UnusedByString}" />
-                            <TextBlock Text="/" />
-                            <TextBlock Text="共" />
-                            <TextBlock Text="{Binding TotalByString}" />
-                        </StackPanel>
-
-                        <ProgressBar Name="TotalTrafficBar" Width="Auto" />
-                        <TextBlock Name="Test" />
-                    </StackPanel>
-
+                    </Border>
                 </StackPanel>
 
+
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Spacing="{StaticResource CardSpacing}">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="状态" />
+                        <Border
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            CornerRadius="8">
+                            <StackPanel Style="{StaticResource PanelStyle}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="余" />
+                                    <TextBlock Text="{Binding UnusedByString}" />
+                                    <TextBlock Text="/" />
+                                    <TextBlock Text="共" />
+                                    <TextBlock Text="{Binding TotalByString}" />
+                                </StackPanel>
+                                <ProgressBar
+                                    Name="TotalTrafficBar"
+                                    Width="Auto"
+                                    Loaded="TotalTrafficBar_Loaded" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1">
+                        <StackPanel Spacing="{StaticResource CardSpacing}">
+                            <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="状态" />
+                            <Border
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel Style="{StaticResource PanelStyle}">
+                                    <StackPanel Orientation="Horizontal" />
+
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
             </Grid>
         </ScrollViewer>
     </Grid>

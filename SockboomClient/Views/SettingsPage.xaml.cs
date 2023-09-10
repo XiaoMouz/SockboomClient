@@ -145,6 +145,5 @@ namespace SockboomClient.Views
             SyncProgressRing.Visibility = Visibility.Collapsed;
             SyncButtonText.Text = "同步";
         }
-
     }
 }

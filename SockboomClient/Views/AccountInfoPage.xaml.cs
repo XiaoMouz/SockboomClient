@@ -30,10 +30,14 @@ namespace SockboomClient.Views
             _vm = SharedViewModel.GetInstance();
             DataContext = _vm.UserInfo;
 
+        }
+
+        private void TotalTrafficBar_Loaded(object sender, RoutedEventArgs e)
+        {
             // 设置流量占比条
             double infoPercent = (double)_vm.UserInfo.UsedTotal / (double)_vm.UserInfo.Total;
             infoPercent = infoPercent * 100;
-            if(infoPercent >= 100) { infoPercent = 100; }
+            if (infoPercent >= 100) { infoPercent = 100; }
             TotalTrafficBar.Value = (int)infoPercent;
             if (infoPercent > 80 && infoPercent != 100) TotalTrafficBar.ShowPaused = true;
             if (infoPercent == 100) TotalTrafficBar.ShowError = true;

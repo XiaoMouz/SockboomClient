@@ -78,6 +78,16 @@
 
                 <!--  Sockboom Account  -->
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="Sockboom 账户" />
+                <toolkit:SettingsCard Description="每次启动应用时自动签到" Header="自动签到">
+                    <toolkit:SettingsCard.HeaderIcon>
+                        <FontIcon Glyph="&#xE73E;" />
+                    </toolkit:SettingsCard.HeaderIcon>
+                    <StackPanel>
+                        <ToggleSwitch Name="AutoCheckinSwitch" />
+                    </StackPanel>
+
+                </toolkit:SettingsCard>
+
                 <toolkit:SettingsCard Description="手动同步您的 Sockboom 账户" Header="同步">
                     <toolkit:SettingsCard.HeaderIcon>
                         <FontIcon Glyph="&#xE895;" />
