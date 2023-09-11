@@ -40,10 +40,19 @@ namespace SockboomClient
 
         private SharedViewModel _vm;
 
+        private string _startToken;
+
         public LoginWindow()
         {
             this.InitializeComponent();
             InitWindowFancy();
+        }
+
+        public LoginWindow(string token)
+        {
+            this.InitializeComponent();
+            InitWindowFancy();
+            _startToken = token;
         }
         
         public LoginWindow(string title,string info)
@@ -278,6 +287,11 @@ namespace SockboomClient
             if (_err != null)
             {
                 ShowDialog(_err.title, _err.info);
+            }
+            if (_startToken != null)
+            {
+                PasswordInput.Password = _startToken;
+                LoginByTokenButton_OnClick(PasswordInput, null);
             }
         }
         private class Ex
