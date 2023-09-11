@@ -30,8 +30,6 @@ namespace SockboomClient
     {
         private IntPtr hwnd;
 
-        private Ex _err;
-
         private AppWindow appWindow;
 
         private AppWindowTitleBar titleBar;
@@ -54,13 +52,6 @@ namespace SockboomClient
             InitWindowFancy();
             _startToken = token;
         }
-        
-        public LoginWindow(string title,string info)
-        {
-            this.InitializeComponent();
-            InitWindowFancy();
-            _err = new Ex(title,info);
-        }   
 
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
@@ -284,25 +275,10 @@ namespace SockboomClient
 
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
-            if (_err != null)
-            {
-                ShowDialog(_err.title, _err.info);
-            }
             if (_startToken != null)
             {
                 PasswordInput.Password = _startToken;
                 LoginByTokenButton_OnClick(PasswordInput, null);
-            }
-        }
-        private class Ex
-        {
-            internal string title;
-            internal string info;
-
-            public Ex(string title, string info)
-            {
-                this.title = title;
-                this.info = info;
             }
         }
     }
