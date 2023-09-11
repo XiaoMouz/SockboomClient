@@ -46,6 +46,10 @@ namespace SockboomClient
             InitWindowFancy();
         }
 
+        /// <summary>
+        /// 自动登录
+        /// </summary>
+        /// <param name="token"></param>
         public LoginWindow(string token)
         {
             this.InitializeComponent();
@@ -247,6 +251,11 @@ namespace SockboomClient
             await dialog.ShowAsync();
         }
 
+        /// <summary>
+        /// 获取用户信息并保存到 vm 单例
+        /// </summary>
+        /// <param name="keeplogin"></param>
+        /// <param name="token"></param>
         private async void GetUserAndSaveToVM(bool? keeplogin, string token)
         {
             var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", token } });
@@ -273,8 +282,14 @@ namespace SockboomClient
             }
         }
 
+        /// <summary>
+        ///  grid 加载后执行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
+            // 自动登录
             if (_startToken != null)
             {
                 PasswordInput.Password = _startToken;
