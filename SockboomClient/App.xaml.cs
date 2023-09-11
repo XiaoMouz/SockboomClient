@@ -40,32 +40,25 @@ namespace SockboomClient
             {
 
                 var Token = Settings.Token;
-                try
-                {
-                    m_window = new LoginWindow(Token);
-                    
-                    
-                    //var Result = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
-                    //{
-                    //    { "token", Token }
-                    //});
-                    //if (Result.Success)
-                    //{
-                    //    var r = Result.Data;
-                    //    r.Token = Token;
-                    //    _vm.UserInfo = r;
-                    //    m_window = new MainWindow();
-                    //}
-                    //else
-                    //{
-                    //    m_window = new LoginWindow();
+                m_window = new LoginWindow(Token);
 
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    m_window = new LoginWindow("发生错误", "自动登录失败:" + ex.Message);
-                }
+
+                //var Result = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
+                //{
+                //    { "token", Token }
+                //});
+                //if (Result.Success)
+                //{
+                //    var r = Result.Data;
+                //    r.Token = Token;
+                //    _vm.UserInfo = r;
+                //    m_window = new MainWindow();
+                //}
+                //else
+                //{
+                //    m_window = new LoginWindow();
+
+                //}
             }
             else
             {
