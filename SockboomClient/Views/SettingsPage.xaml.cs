@@ -86,6 +86,7 @@ namespace SockboomClient.Views
                 UpdateTheme(ElementTheme.Default,sender);
             }
         }
+
         private void UpdateTheme(ElementTheme theme,object sender)
         {
             if(theme == ElementTheme.Default)

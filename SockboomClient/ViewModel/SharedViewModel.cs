@@ -43,7 +43,7 @@ namespace SockboomClient.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         /// <summary>
-        /// 请求更新用户信息
+        /// 更新用户信息
         /// </summary>
         public async Task<bool> RequestUpdateUserInfo() 
         {
@@ -58,9 +58,13 @@ namespace SockboomClient.ViewModel
                     return false;
                 }
                 var Result = await UserInfo.UpdateUserInfo();
+                var ssrLink = await UserInfo.UpdateUserSub();
                 if (Result.Success)
                 {
+                    var cacheToken = UserInfo.Token;
                     UserInfo = Result.Data;
+                    UserInfo.Token = cacheToken;
+                    OnPropertyChanged(this.GetType().Name);
                     return true;
                 }
                 else
@@ -71,7 +75,9 @@ namespace SockboomClient.ViewModel
             {
                 return false;
             }
-            
+           
+
+
         }
     }
 }

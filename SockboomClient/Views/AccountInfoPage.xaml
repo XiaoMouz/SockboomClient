@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="using:CommunityToolkit.WinUI.Controls"
     Background="{ThemeResource ControlAltFillColorTransparentBrush}"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -61,7 +62,10 @@
                     </TransitionCollection>
                 </Grid.ChildrenTransitions>
 
-                <StackPanel Grid.Column="0" Spacing="{StaticResource CardSpacing}">
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,28,0"
+                    Spacing="{StaticResource CardSpacing}">
                     <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="信息" />
                     <Border
                         BorderBrush="Transparent"
@@ -71,7 +75,7 @@
                             <PersonPicture
                                 Width="128"
                                 Height="128"
-                                ProfilePicture="https://learn.microsoft.com/windows/uwp/contacts-and-calendar/images/shoulder-tap-static-payload.png" />
+                                DisplayName="{Binding Token}" />
                             <TextBlock>您好</TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>用户等级:</TextBlock>
@@ -84,6 +88,7 @@
 
                 <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
@@ -111,7 +116,7 @@
 
                     <Grid Grid.Row="1">
                         <StackPanel Spacing="{StaticResource CardSpacing}">
-                            <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="状态" />
+                            <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="签到" />
                             <Border
                                 BorderBrush="Transparent"
                                 BorderThickness="1"
@@ -119,6 +124,44 @@
                                 <StackPanel Style="{StaticResource PanelStyle}">
                                     <StackPanel Orientation="Horizontal" />
 
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <StackPanel Spacing="{StaticResource CardSpacing}">
+                            <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="订阅" />
+                            <Border
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
+                                CornerRadius="8">
+                                <StackPanel Loaded="SubscribeStackPanel_Loaded" Style="{StaticResource PanelStyle}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Orientation="Horizontal">
+                                            <TextBox
+                                                Name="SSRSubText"
+                                                IsReadOnly="True"
+                                                Text="{Binding SSRSub, UpdateSourceTrigger=PropertyChanged}" />
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox
+                                                Name="ClashSubText"
+                                                IsReadOnly="True"
+                                                Text="{Binding ClashSub, UpdateSourceTrigger=PropertyChanged}" />
+                                        </StackPanel>
+                                    </Grid>
                                 </StackPanel>
                             </Border>
                         </StackPanel>

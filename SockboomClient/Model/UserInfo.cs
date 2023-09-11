@@ -113,6 +113,20 @@ namespace SockboomClient.Model
         [JsonProperty("money")]
         public double Money;
 
+        /// <summary>
+        /// SSR 订阅链接
+        /// </summary>
+        public string SSRSub;
+
+        /// <summary>
+        /// Clash 订阅链接
+        /// </summary>
+        public string ClashSub;
+
+        /// <summary>
+        /// 获取新的用户信息
+        /// </summary>
+        /// <returns></returns>
         public async Task<HttpResult<UserInfo>> UpdateUserInfo()
         {
             var info = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string>
@@ -122,6 +136,24 @@ namespace SockboomClient.Model
             return info;
         }
 
+        /// <summary>
+        /// 获取新的用户订阅
+        /// </summary>
+        /// <returns></returns>
+        public async Task<string> UpdateUserSub()
+        {
+            var info = await ApiClient.GetRequest<string>(Client.Apis.GetPaths.SUBSCRIBE, new Dictionary<string, string>
+            {
+                { "token",token }
+            });
+            if (info.Success)
+            {
+                this.SSRSub = info.Subscribe;
+                this.ClashSub = (@"https://sub-2.sockboom.pro/sub?target=clash&new_name=true&url=" + info.Subscribe + @"&filename=Sockboom&udp=true&config=https%3A%2F%2Fconfig.sockboom.me%2Fsubconfig.ini");
+                return info.Subscribe;
+            }
+            return null;
+        }
         private string GetStringValue(long value)
         {
             // 计算 Unused 从 Bit 至 Gb，若大于 1024 Gb 则设为 Tb

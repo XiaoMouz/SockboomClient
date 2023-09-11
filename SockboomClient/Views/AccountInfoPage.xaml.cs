@@ -29,7 +29,6 @@ namespace SockboomClient.Views
             this.InitializeComponent();
             _vm = SharedViewModel.GetInstance();
             DataContext = _vm.UserInfo;
-
         }
 
         private void TotalTrafficBar_Loaded(object sender, RoutedEventArgs e)
@@ -41,6 +40,12 @@ namespace SockboomClient.Views
             TotalTrafficBar.Value = (int)infoPercent;
             if (infoPercent > 80 && infoPercent != 100) TotalTrafficBar.ShowPaused = true;
             if (infoPercent == 100) TotalTrafficBar.ShowError = true;
+        }
+
+        private void SubscribeStackPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            SSRSubText.Text = _vm.UserInfo.SSRSub;
+            ClashSubText.Text = _vm.UserInfo.ClashSub;
         }
     }
 }

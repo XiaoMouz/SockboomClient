@@ -264,6 +264,7 @@ namespace SockboomClient
                 // 保存用户信息
                 _vm.UserInfo = user.Data;
                 _vm.UserInfo.Token = token;
+                await _vm.UserInfo.UpdateUserSub();
                 this.Hide();
                 new MainWindow().Activate();
                 this.Close();
