@@ -83,7 +83,7 @@
                         <FontIcon Glyph="&#xE73E;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel>
-                        <ToggleSwitch Name="AutoCheckinSwitch" />
+                        <ToggleSwitch Toggled="AutoCheckinSwitch_Toggled" Name="AutoCheckinSwitch" />
                     </StackPanel>
 
                 </toolkit:SettingsCard>

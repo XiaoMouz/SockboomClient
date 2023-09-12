@@ -38,6 +38,31 @@ namespace SockboomClient.Config
                 }
             }
         }
+        public static bool AutoCheckin
+        {
+            get
+            {
+                if (localSettings.Values.TryGetValue("AutoCheckin", out object AutoLoginInfo))
+                {
+                    return AutoLoginInfo.Equals("true");
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            set
+            {
+                if (value)
+                {
+                    ApplicationData.Current.LocalSettings.Values["AutoCheckin"] = "true";
+                }
+                else
+                {
+                    ApplicationData.Current.LocalSettings.Values["AutoCheckin"] = "false";
+                }
+            }
+        }
         public static string Token
         {
             get

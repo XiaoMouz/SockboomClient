@@ -75,12 +75,18 @@
                             <PersonPicture
                                 Width="128"
                                 Height="128"
-                                DisplayName="{Binding Token}" />
+                                DisplayName="{Binding UserInfo.Token}" />
                             <TextBlock>您好</TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>用户等级:</TextBlock>
-                                <TextBlock Text="{Binding Level}" />
+                                <TextBlock Text="{Binding UserInfo.Level, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>可用天数:</TextBlock>
+                                <TextBlock Text="{Binding UserInfo.Days, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text=" 天" />
+                            </StackPanel>
+
                         </StackPanel>
                     </Border>
                 </StackPanel>
@@ -99,69 +105,111 @@
                             BorderThickness="1"
                             CornerRadius="8">
                             <StackPanel Style="{StaticResource PanelStyle}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="余" />
-                                    <TextBlock Text="{Binding UnusedByString}" />
-                                    <TextBlock Text="/" />
-                                    <TextBlock Text="共" />
-                                    <TextBlock Text="{Binding TotalByString}" />
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="余" />
+                                        <TextBlock Text="{Binding UserInfo.UnusedByString, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="/" />
+                                        <TextBlock Text="共" />
+                                        <TextBlock Text="{Binding UserInfo.TotalByString, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                    <ProgressBar
+                                        Name="TotalTrafficBar"
+                                        Width="Auto"
+                                        Margin="0,8,0,4"
+                                        Loaded="TotalTrafficBar_Loaded" />
                                 </StackPanel>
-                                <ProgressBar
-                                    Name="TotalTrafficBar"
-                                    Width="Auto"
-                                    Loaded="TotalTrafficBar_Loaded" />
+
+                                <StackPanel Margin="0,8,0,8">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="您今日已使用" />
+                                        <TextBlock Text="{Binding UserInfo.UsedTodayByString, UpdateSourceTrigger=PropertyChanged}" />
+
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Button
+                                    Name="CheckinButton"
+                                    Click="CheckinButton_Click"
+                                    IsEnabled="{Binding CheckinModel.CheckinEnable}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ProgressRing Name="CheckinButtonProgressRing" Visibility="Collapsed" />
+                                        <TextBlock Name="CheckinButtonText" Text="{Binding CheckinModel.CheckinMessage}" />
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
                         </Border>
                     </StackPanel>
 
                     <Grid Grid.Row="1">
                         <StackPanel Spacing="{StaticResource CardSpacing}">
-                            <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="签到" />
-                            <Border
-                                BorderBrush="Transparent"
-                                BorderThickness="1"
-                                CornerRadius="8">
-                                <StackPanel Style="{StaticResource PanelStyle}">
-                                    <StackPanel Orientation="Horizontal" />
-
-                                </StackPanel>
-                            </Border>
-                        </StackPanel>
-                    </Grid>
-
-                    <Grid Grid.Row="2">
-                        <StackPanel Spacing="{StaticResource CardSpacing}">
                             <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="订阅" />
                             <Border
                                 BorderBrush="Transparent"
                                 BorderThickness="1"
                                 CornerRadius="8">
-                                <StackPanel Loaded="SubscribeStackPanel_Loaded" Style="{StaticResource PanelStyle}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                        </Grid.RowDefinitions>
+                                <StackPanel Orientation="Vertical" Style="{StaticResource PanelStyle}">
+
+                                    <StackPanel
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Orientation="Horizontal">
+                                        <Border
+                                            BorderBrush="Transparent"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBox
+                                                    Name="SSRSubText"
+                                                    CornerRadius="0"
+                                                    IsReadOnly="True"
+                                                    Text="{Binding UserInfo.SSRSub, UpdateSourceTrigger=PropertyChanged}" />
+                                                <Button Click="SSRLinkButton_Click" CornerRadius="0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <FontIcon
+                                                            Margin="0,0,5,0"
+                                                            FontSize="16"
+                                                            Glyph="&#xE8C8;" />
+                                                        <TextBlock Text="复制" />
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </Border>
+
+                                    </StackPanel>
+
+                                    <Border
+                                        BorderBrush="Transparent"
+                                        BorderThickness="1"
+                                        CornerRadius="8">
                                         <StackPanel
-                                            Grid.Row="0"
                                             Grid.Column="0"
+                                            Margin="0,10,0,0"
                                             Orientation="Horizontal">
-                                            <TextBox
-                                                Name="SSRSubText"
-                                                IsReadOnly="True"
-                                                Text="{Binding SSRSub, UpdateSourceTrigger=PropertyChanged}" />
+                                            <Border
+                                                BorderBrush="Transparent"
+                                                BorderThickness="1"
+                                                CornerRadius="8">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBox
+                                                        Name="ClashSubText"
+                                                        MaxWidth="365"
+                                                        CornerRadius="0"
+                                                        IsReadOnly="True"
+                                                        Text="{Binding UserInfo.ClashSub, UpdateSourceTrigger=PropertyChanged}" />
+                                                    <Button Click="ClashLinkButton_Click" CornerRadius="0">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <FontIcon
+                                                                Margin="0,0,5,0"
+                                                                FontSize="16"
+                                                                Glyph="&#xE8C8;" />
+                                                            <TextBlock Text="复制" />
+                                                        </StackPanel>
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
                                         </StackPanel>
-                                        <StackPanel Grid.Row="1" Grid.Column="0">
-                                            <TextBox
-                                                Name="ClashSubText"
-                                                IsReadOnly="True"
-                                                Text="{Binding ClashSub, UpdateSourceTrigger=PropertyChanged}" />
-                                        </StackPanel>
-                                    </Grid>
+                                    </Border>
                                 </StackPanel>
                             </Border>
                         </StackPanel>

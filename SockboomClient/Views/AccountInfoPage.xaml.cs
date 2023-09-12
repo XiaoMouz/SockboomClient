@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
@@ -28,7 +29,7 @@ namespace SockboomClient.Views
         {
             this.InitializeComponent();
             _vm = SharedViewModel.GetInstance();
-            DataContext = _vm.UserInfo;
+            DataContext = _vm;
         }
 
         private void TotalTrafficBar_Loaded(object sender, RoutedEventArgs e)
@@ -42,10 +43,26 @@ namespace SockboomClient.Views
             if (infoPercent == 100) TotalTrafficBar.ShowError = true;
         }
 
-        private void SubscribeStackPanel_Loaded(object sender, RoutedEventArgs e)
+        private void SSRLinkButton_Click(object sender, RoutedEventArgs args)
         {
-            SSRSubText.Text = _vm.UserInfo.SSRSub;
-            ClashSubText.Text = _vm.UserInfo.ClashSub;
+            var package = new DataPackage();
+            package.SetText(_vm.UserInfo.SSRSub);
+            Clipboard.SetContent(package);
+        }
+
+        private void ClashLinkButton_Click(object sender, RoutedEventArgs args)
+        {
+            var package = new DataPackage();
+            package.SetText(_vm.UserInfo.ClashSub);
+            Clipboard.SetContent(package);
+        }
+
+        private void CheckinButton_Click(object sender, RoutedEventArgs args)
+        {
+            CheckinButton.IsEnabled = false;
+            CheckinButtonProgressRing.Visibility = Visibility.Visible;
+            _vm.CheckinRequest();
+            CheckinButtonProgressRing.Visibility = Visibility.Collapsed;
         }
     }
 }

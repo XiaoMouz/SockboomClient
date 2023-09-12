@@ -14,6 +14,7 @@ using WinUIEx;
 using WinRT;
 using WinRT.Interop;
 using SockboomClient.ViewModel;
+using SockboomClient.Config;
 
 namespace SockboomClient
 {
@@ -183,7 +184,6 @@ namespace SockboomClient
                     return menuItem;
                 }
             }
-
             return null;
         }
 
@@ -219,6 +219,14 @@ namespace SockboomClient
                     default:
                         break;
                 }
+            }
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Settings.AutoCheckin)
+            {
+                _vm.CheckinRequest();
             }
         }
     }

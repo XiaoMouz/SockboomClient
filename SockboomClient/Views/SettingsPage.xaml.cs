@@ -45,7 +45,7 @@ namespace SockboomClient.Views
         /// <param name="e"></param>
         private void OnSettingsPageLoaded(object sender, RoutedEventArgs e)
         {
-            // Get right now theme
+            // 主题设置
             var currentTheme = Settings.Theme;
             switch (currentTheme)
             {
@@ -58,6 +58,34 @@ namespace SockboomClient.Views
                 default:
                     themeMode.SelectedIndex = 2;
                     break;
+            }
+
+            // 自动登录检测
+            var autoCheckin = Settings.AutoCheckin;
+            if (autoCheckin)
+            {
+                AutoCheckinSwitch.IsOn = true;
+            }
+            else
+            {
+                AutoCheckinSwitch.IsOn = false;
+            }
+        }
+
+        /// <summary>
+        /// 自动登录切换
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AutoCheckinSwitch_Toggled(object sender,RoutedEventArgs e)
+        {
+            if (AutoCheckinSwitch.IsOn)
+            {
+                Settings.AutoCheckin = true;
+            }
+            else
+            {
+                Settings.AutoCheckin = false;
             }
         }
 

@@ -105,23 +105,23 @@ namespace SockboomClient.Model
         /// 用户流量有效期 (单位: 天)
         /// </summary>
         [JsonProperty("days")]
-        public int Days;
+        public int Days { get; set; }
 
         /// <summary>
         /// 用户账户余额
         /// </summary>
         [JsonProperty("money")]
-        public double Money;
+        public double Money { get; set; }
 
         /// <summary>
         /// SSR 订阅链接
         /// </summary>
-        public string SSRSub;
+        public string SSRSub { get; set; }
 
         /// <summary>
         /// Clash 订阅链接
         /// </summary>
-        public string ClashSub;
+        public string ClashSub { get; set; }
 
         /// <summary>
         /// 获取新的用户信息
@@ -156,18 +156,28 @@ namespace SockboomClient.Model
         }
         private string GetStringValue(long value)
         {
-            // 计算 Unused 从 Bit 至 Gb，若大于 1024 Gb 则设为 Tb
+            // 计算 Unused 从 1024 Bit 至 MB，若大于 1024 MB 则设为 GB, 若大于 1024 GB 则设为 TB
             if (value == 0) return "0M";
-            double valueGb = value / (1024 * 1024 * 1024);
-
-            if (valueGb > 1024)
+            double megabytes = value / (1024 * 1024);
+            if (megabytes > 1024)
             {
-                double valueTb = valueGb / 1024;
-                return (Math.Round(valueTb, 2) + " TB");
+                double gigabytes = megabytes / 1024;
+                if (gigabytes > 1024)
+                {
+                    double terabytes = gigabytes / 1024;
+                    terabytes = Math.Round(terabytes, 2);
+                    return $"{terabytes} TB";
+                }
+                else
+                {
+                    gigabytes = Math.Round(gigabytes, 2);
+                    return $"{gigabytes} GB";
+                }
             }
             else
             {
-                return (Math.Round(valueGb, 2) + " GB");
+                megabytes = Math.Round(megabytes, 2);
+                return $"{megabytes} MB";
             }
         }
     }
