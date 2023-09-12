@@ -66,6 +66,12 @@
                         BorderThickness="1"
                         CornerRadius="8">
                         <StackPanel Style="{StaticResource PanelStyle}">
+                            <InfoBar
+                                Name="InfoBarTip"
+                                Title="提请注意"
+                                IsOpen="False"
+                                Message=""
+                                Severity="Error" />
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -74,7 +80,7 @@
                                 </Grid.RowDefinitions>
                                 <StackPanel
                                     Grid.Row="0"
-                                    Margin="0,0,0,10"
+                                    Margin="0,5,0,10"
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal"
                                     Spacing="{StaticResource CardSpacing}">
@@ -86,7 +92,7 @@
                                 </StackPanel>
                                 <StackPanel
                                     Grid.Row="1"
-                                    Margin="0,0,0,10"
+                                    Margin="0,5,0,10"
                                     Orientation="Horizontal"
                                     Spacing="{StaticResource CardSpacing}">
                                     <TextBlock VerticalAlignment="Center" Text="支付平台: " />
@@ -126,17 +132,11 @@
                                         </StackPanel>
                                     </Button>
                                 </Grid>
-
                             </Grid>
                         </StackPanel>
                     </Border>
                 </StackPanel>
-                <InfoBar
-                    Name="InfoBarTip"
-                    Title="提请注意"
-                    IsOpen="False"
-                    Message=""
-                    Severity="Error" />
+
             </Grid>
         </ScrollView>
     </Grid>
