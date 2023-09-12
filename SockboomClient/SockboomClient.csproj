@@ -32,6 +32,7 @@
     <None Remove="Compose\Dialog.xaml" />
     <None Remove="LoginWindow.xaml" />
     <None Remove="Views\AccountInfoPage.xaml" />
+    <None Remove="Views\BrowserWindow.xaml" />
     <None Remove="Views\ClashConfigPage.xaml" />
     <None Remove="Views\RechargePage.xaml" />
     <None Remove="Views\SettingsPage.xaml" />
@@ -53,6 +54,12 @@
     <PackageReference Include="Vanara.PInvoke.User32" Version="3.4.16" />
     <PackageReference Include="WinUIEx" Version="2.2.0" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\BrowserWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>

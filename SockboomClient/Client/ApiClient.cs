@@ -99,6 +99,7 @@ namespace SockboomClient.Client
                 try
                 {
                     var responseData = JsonConvert.DeserializeObject<HttpResult<T>>(responseContent); // 反序列化
+
                     if (responseData != null && responseData.Data != null)
                     {
                         AppLogger.LogDebug($"Response: {responseData.Data}");
@@ -115,13 +116,19 @@ namespace SockboomClient.Client
                 }
                 catch (Exception e)
                 {
-                    r.Code = 500;
+                    r.Code = 418;
                     r.Message = "客户端出现错误:" + e.Message;
                     return r;
                 }
             }
-            r.Code = 500;
-            r.Message = "响应出现错误。请重试, 服务端状态码:" + response?.StatusCode;
+            if(response == null)
+            {
+                r.Code = 418;
+                r.Message = "响应出现错误, 请重试, 未收到响应";
+                return r;
+            }
+            r.Code = (int)response.StatusCode;
+            r.Message = "响应出现错误, 请重试, 服务端状态码:" + response?.StatusCode;
             return r;
 
         }

@@ -7,8 +7,137 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="{ThemeResource ControlAltFillColorTransparentBrush}"
     mc:Ignorable="d">
+    <Page.Resources>
+        <x:Double x:Key="CardSpacing">3</x:Double>
 
-    <Grid>
-        <TextBlock>You didn't have cash</TextBlock>
+        <Style
+            x:Key="SectionHeaderTextBlockStyle"
+            BasedOn="{StaticResource BodyStrongTextBlockStyle}"
+            TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Margin" Value="1,29,0,5" />
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="PanelStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Spacing" Value="{StaticResource CardSpacing}" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}" />
+        </Style>
+    </Page.Resources>
+    <Grid x:Name="RootGrid" Loaded="RootGrid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="PageHeader"
+            Margin="36,24,36,0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="充值余额" />
+
+        <ScrollView
+            x:Name="contentSV"
+            Grid.Row="1"
+            Padding="36,0,36,0"
+            IsTabStop="False"
+            UseSystemFocusVisuals="False"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromVerticalOffset="50" />
+                        <RepositionThemeTransition IsStaggeringEnabled="False" />
+                    </TransitionCollection>
+                </Grid.ChildrenTransitions>
+
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,28,0"
+                    Spacing="{StaticResource CardSpacing}">
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="充值" />
+                    <Border
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <StackPanel Style="{StaticResource PanelStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Margin="0,0,0,10"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal"
+                                    Spacing="{StaticResource CardSpacing}">
+                                    <TextBlock VerticalAlignment="Center" Text="充值金额: " />
+                                    <NumberBox
+                                        Name="PriceInput"
+                                        AcceptsExpression="True"
+                                        PlaceholderText="元" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Margin="0,0,0,10"
+                                    Orientation="Horizontal"
+                                    Spacing="{StaticResource CardSpacing}">
+                                    <TextBlock VerticalAlignment="Center" Text="支付平台: " />
+                                    <RadioButtons x:Name="PaymentPlatformRadiosButton" SelectedIndex="0">
+                                        <TextBlock Tag="ALIPAY_WEB">支付宝</TextBlock>
+                                    </RadioButtons>
+                                </StackPanel>
+                                <Grid Grid.Row="2" HorizontalAlignment="Right">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Button
+                                        Name="RefreshButton"
+                                        Grid.Column="0"
+                                        Margin="0,10,10,0"
+                                        Click="RootGrid_Loaded"
+                                        Visibility="Collapsed">
+                                        <StackPanel Orientation="Horizontal">
+                                            <FontIcon
+                                                Margin="0,0,5,0"
+                                                FontSize="16"
+                                                Glyph="&#xE72C;" />
+                                            <TextBlock Text="刷新接口状态" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button
+                                        Name="PaymentButton"
+                                        Grid.Column="1"
+                                        Margin="0,10,0,0">
+                                        <StackPanel Orientation="Horizontal">
+                                            <FontIcon
+                                                Margin="0,0,5,0"
+                                                FontSize="16"
+                                                Glyph="&#xE724;" />
+                                            <TextBlock Text=" 发起支付请求" />
+                                        </StackPanel>
+                                    </Button>
+                                </Grid>
+
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <InfoBar
+                    Name="InfoBarTip"
+                    Title="提请注意"
+                    IsOpen="False"
+                    Message=""
+                    Severity="Error" />
+            </Grid>
+        </ScrollView>
     </Grid>
 </Page>
