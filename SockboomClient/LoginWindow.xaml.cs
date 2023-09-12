@@ -20,6 +20,7 @@ using static Vanara.PInvoke.Kernel32.REASON_CONTEXT;
 using SockboomClient.ViewModel;
 using Newtonsoft.Json.Linq;
 using SockboomClient.Config;
+using System.Net.Http;
 
 namespace SockboomClient
 {
@@ -272,7 +273,12 @@ namespace SockboomClient
             else
             {
                 // 登录失败
-                ShowDialog("登录失败", "账户密码或Token有误:" + user.Code + "/" + user.Message);
+                switch (user.Error.GetType().Name)
+                {
+                    case nameof(HttpRequestException): ShowDialog("登录失败", "网络错误，请检查网络连接与代理设置:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message); break;
+                    default: ShowDialog("登录失败", "账户密码或Token有误:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message);break;
+                }
+                
                 SetElementStatus(true);
             }
             if (keeplogin == true)

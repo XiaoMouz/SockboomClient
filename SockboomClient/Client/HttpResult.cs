@@ -48,6 +48,11 @@ namespace SockboomClient.Client
         public string Pid { get; set; }
         #endregion
 
+        /// <summary>
+        /// 异常传递
+        /// </summary>
+        public Exception Error { get; set; }
+
         public T Data { get; set; }
 
         public override string ToString()

@@ -85,8 +85,9 @@ namespace SockboomClient.Client
             HttpResult<T> r = new HttpResult<T>();
             if (ex != null)
             {
-                r.Code = 0;
+                r.Code = 418;
                 r.Message = ex.Message;
+                r.Error = ex;
                 return r;
             }
 
