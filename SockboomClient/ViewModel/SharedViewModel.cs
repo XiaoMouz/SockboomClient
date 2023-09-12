@@ -15,18 +15,17 @@ namespace SockboomClient.ViewModel
 
         private static SharedViewModel _instance;
 
-        public static SharedViewModel GetInstance()
-        {
-            if (_instance == null)
-                _instance = new SharedViewModel();
-
-            return _instance;
-        }
+        
 
         private CheckinModel _checkinModel;
         public CheckinModel CheckinModel
         {
-            get { return _checkinModel; }
+            get { 
+                if(_checkinModel == null)
+                {
+                    _checkinModel = new CheckinModel();
+                }
+                return _checkinModel; }
             set
             {
                 if (_checkinModel != value)
@@ -51,11 +50,21 @@ namespace SockboomClient.ViewModel
             }
         }
 
+        public static SharedViewModel GetInstance()
+        {
+            if (_instance == null)
+                _instance = new SharedViewModel();
+            return _instance;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if(PropertyChanged!= null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            } 
         }
         /// <summary>
         /// 更新用户信息
@@ -79,8 +88,8 @@ namespace SockboomClient.ViewModel
                     var cacheToken = UserInfo.Token;
                     UserInfo = Result.Data;
                     UserInfo.Token = cacheToken;
-                    OnPropertyChanged(UserInfo.GetType().Name);
-                    OnPropertyChanged(GetType().Name);
+                    OnPropertyChanged(nameof(UserInfo));
+
                     return true;
                 }
                 else
@@ -131,6 +140,7 @@ namespace SockboomClient.ViewModel
                 CheckinModel.CheckinEnable = true;
             }
             OnPropertyChanged(nameof(CheckinModel));
+           
         }
     }
 }

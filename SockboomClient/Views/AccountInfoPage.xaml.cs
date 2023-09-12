@@ -42,8 +42,12 @@ namespace SockboomClient.Views
             if (infoPercent > 80 && infoPercent != 100) TotalTrafficBar.ShowPaused = true;
             if (infoPercent == 100) TotalTrafficBar.ShowError = true;
 
-            if (_vm.CheckinModel.CheckinMessage == String.Empty)
+            if (_vm.CheckinModel.CheckinMessage==null|| _vm.CheckinModel.CheckinMessage.Equals(""))
+            {
                 CheckinButtonText.Text = "签到";
+                CheckinButton.IsEnabled = true;
+            }
+                
         }
 
         private void SSRLinkButton_Click(object sender, RoutedEventArgs args)

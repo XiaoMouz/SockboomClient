@@ -79,11 +79,11 @@
                             <TextBlock>您好</TextBlock>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>用户等级:</TextBlock>
-                                <TextBlock Text="{Binding UserInfo.Level, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text="{Binding UserInfo.Level, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>可用天数:</TextBlock>
-                                <TextBlock Text="{Binding UserInfo.Days, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBlock Text="{Binding UserInfo.Days, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                 <TextBlock Text=" 天" />
                             </StackPanel>
 
@@ -108,10 +108,10 @@
                                 <StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="余" />
-                                        <TextBlock Text="{Binding UserInfo.UnusedByString, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="{Binding UserInfo.UnusedByString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                         <TextBlock Text="/" />
                                         <TextBlock Text="共" />
-                                        <TextBlock Text="{Binding UserInfo.TotalByString, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="{Binding UserInfo.TotalByString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                     </StackPanel>
                                     <ProgressBar
                                         Name="TotalTrafficBar"
@@ -123,7 +123,7 @@
                                 <StackPanel Margin="0,8,0,8">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="您今日已使用" />
-                                        <TextBlock Text="{Binding UserInfo.UsedTodayByString, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock Text="{Binding UserInfo.UsedTodayByString, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
 
                                     </StackPanel>
                                 </StackPanel>
@@ -131,10 +131,10 @@
                                 <Button
                                     Name="CheckinButton"
                                     Click="CheckinButton_Click"
-                                    IsEnabled="{Binding CheckinModel.CheckinEnable}">
+                                    IsEnabled="{Binding CheckinModel.CheckinEnable, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}">
                                     <StackPanel Orientation="Horizontal">
                                         <ProgressRing Name="CheckinButtonProgressRing" Visibility="Collapsed" />
-                                        <TextBlock Name="CheckinButtonText" Text="{Binding CheckinModel.CheckinMessage}" />
+                                        <TextBlock Name="CheckinButtonText" Text="{Binding CheckinModel.CheckinMessage, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -163,7 +163,7 @@
                                                     Name="SSRSubText"
                                                     CornerRadius="0"
                                                     IsReadOnly="True"
-                                                    Text="{Binding UserInfo.SSRSub, UpdateSourceTrigger=PropertyChanged}" />
+                                                    Text="{Binding UserInfo.SSRSub, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                                 <Button Click="SSRLinkButton_Click" CornerRadius="0">
                                                     <StackPanel Orientation="Horizontal">
                                                         <FontIcon
@@ -196,7 +196,7 @@
                                                         MaxWidth="365"
                                                         CornerRadius="0"
                                                         IsReadOnly="True"
-                                                        Text="{Binding UserInfo.ClashSub, UpdateSourceTrigger=PropertyChanged}" />
+                                                        Text="{Binding UserInfo.ClashSub, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                                                     <Button Click="ClashLinkButton_Click" CornerRadius="0">
                                                         <StackPanel Orientation="Horizontal">
                                                             <FontIcon
