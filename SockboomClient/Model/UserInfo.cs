@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace SockboomClient.Model
 {
+    /// <summary>
+    /// Sockboom 用户信息
+    /// </summary>
     public class UserInfo
     {
         private string token;

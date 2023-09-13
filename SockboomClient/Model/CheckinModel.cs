@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace SockboomClient.Model
 {
+    /// <summary>
+    /// 签到信息模型
+    /// </summary>
     public class CheckinModel
     {
         /// <summary>
