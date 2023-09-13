@@ -82,14 +82,14 @@ namespace SockboomClient.ViewModel
                     return false;
                 }
                 var Result = await UserInfo.UpdateUserInfo();
-                var ssrLink = await UserInfo.UpdateUserSub();
+                
                 if (Result.Success)
                 {
                     var cacheToken = UserInfo.Token;
                     UserInfo = Result.Data;
                     UserInfo.Token = cacheToken;
+                    var ssrLink = await UserInfo.UpdateUserSub();
                     OnPropertyChanged(nameof(UserInfo));
-
                     return true;
                 }
                 else
