@@ -83,7 +83,7 @@
                         <FontIcon Glyph="&#xE73E;" />
                     </toolkit:SettingsCard.HeaderIcon>
                     <StackPanel>
-                        <ToggleSwitch Toggled="AutoCheckinSwitch_Toggled" Name="AutoCheckinSwitch" />
+                        <ToggleSwitch Name="AutoCheckinSwitch" Toggled="AutoCheckinSwitch_Toggled" />
                     </StackPanel>
 
                 </toolkit:SettingsCard>
@@ -126,7 +126,10 @@
                         IsTextSelectionEnabled="True"
                         Text="1.0.0" />
                     <toolkit:SettingsExpander.Items>
-                        <toolkit:SettingsCard Header="Github 存储库" IsClickEnabled="True">
+                        <toolkit:SettingsCard
+                            Click="OpenRepoInBrowser_OnClick"
+                            Header="Github 存储库"
+                            IsClickEnabled="True">
                             <TextBlock
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 IsTextSelectionEnabled="True"
@@ -137,6 +140,7 @@
                         </toolkit:SettingsCard>
                         <toolkit:SettingsCard
                             x:Name="bugRequestCard"
+                            Click="OpenIssueInBrowser_OnClick"
                             Header="反馈 Bug 或请求新功能"
                             IsClickEnabled="True">
                             <toolkit:SettingsCard.ActionIcon>

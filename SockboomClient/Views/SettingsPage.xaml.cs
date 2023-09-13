@@ -174,5 +174,14 @@ namespace SockboomClient.Views
             SyncProgressRing.Visibility = Visibility.Collapsed;
             SyncButtonText.Text = "同步";
         }
+
+        private void OpenRepoInBrowser_OnClick(object sender,RoutedEventArgs e)
+        {
+            _ = Launcher.LaunchUriAsync(new Uri("https://github.com/XiaoMouz/SockboomClient"));
+        }
+        private void OpenIssueInBrowser_OnClick(object sender, RoutedEventArgs e)
+        {
+            _ = Launcher.LaunchUriAsync(new Uri("https://github.com/XiaoMouz/SockboomClient/issues"));
+        }
     }
 }
