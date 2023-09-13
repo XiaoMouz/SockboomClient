@@ -35,6 +35,8 @@ namespace SockboomClient.Views
         {
             this.InitializeComponent();
             _vm = SharedViewModel.GetInstance();
+            this.DataContext = _vm;
+
         }
 
 

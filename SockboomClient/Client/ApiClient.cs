@@ -128,7 +128,7 @@ namespace SockboomClient.Client
                 return r;
             }
             r.Code = (int)response.StatusCode;
-            r.Message = "响应出现错误, 请重试, 服务端状态码:" + response?.StatusCode;
+            r.Message = "响应出现错误, 请重试, 服务端状态:" + response?.StatusCode;
             return r;
 
         }

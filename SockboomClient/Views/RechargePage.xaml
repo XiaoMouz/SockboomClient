@@ -78,8 +78,13 @@
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
                                 <StackPanel
                                     Grid.Row="0"
+                                    Grid.Column="0"
                                     Margin="0,5,0,10"
                                     VerticalAlignment="Center"
                                     Orientation="Horizontal"
@@ -100,7 +105,28 @@
                                         <TextBlock Tag="ALIPAY_WEB">支付宝</TextBlock>
                                     </RadioButtons>
                                 </StackPanel>
-                                <Grid Grid.Row="2" HorizontalAlignment="Right">
+                                <StackPanel
+                                    Grid.RowSpan="2"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right">
+                                    <Button>
+                                        <StackPanel>
+                                            <FontIcon Glyph="&#xE8C7;" />
+                                            <StackPanel>
+                                                <TextBlock HorizontalAlignment="Center" Text="余额" />
+                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding UserInfo.Money, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                                    <TextBlock Text="元" />
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                                <Grid
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
                                         <ColumnDefinition />
