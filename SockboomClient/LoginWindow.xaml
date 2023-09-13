@@ -6,7 +6,7 @@
     xmlns:local="using:SockboomClient"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-    <Grid>
+    <Grid Loaded="Grid_Loaded">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -15,7 +15,7 @@
                         Name="LoginInput"
                         Width="200"
                         Margin="20,10"
-                        PlaceholderText="Email / Token" />
+                        PlaceholderText="Email" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <FontIcon Glyph="&#xE72E;" />
@@ -23,7 +23,7 @@
                         Name="PasswordInput"
                         Width="200"
                         Margin="20,10"
-                        PlaceholderText="密码" />
+                        PlaceholderText="密码 / Token" />
                 </StackPanel>
             </StackPanel>
             <StackPanel Margin="5">
@@ -60,6 +60,7 @@
                 <Button
                     Name="LoginByTokenButton"
                     Grid.Column="1"
+                    Click="LoginByTokenButton_OnClick"
                     Content="透过 Token 登录" />
             </Grid>
 

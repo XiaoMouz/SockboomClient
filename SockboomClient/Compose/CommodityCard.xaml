@@ -1,0 +1,76 @@
+﻿<UserControl
+    x:Class="SockboomClient.Compose.CommodityCard"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SockboomClient.Compose"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <x:Double x:Key="CardSpacing">3</x:Double>
+
+        <Style
+            x:Key="SectionHeaderTextBlockStyle"
+            BasedOn="{StaticResource BodyStrongTextBlockStyle}"
+            TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Margin" Value="1,29,0,5" />
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="PanelStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Spacing" Value="{StaticResource CardSpacing}" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}" />
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Spacing="{StaticResource CardSpacing}">
+        <Border
+            BorderBrush="Transparent"
+            BorderThickness="1"
+            CornerRadius="8">
+            <StackPanel
+                x:Name="Card"
+                Width="200"
+                Height="Auto"
+                Style="{StaticResource PanelStyle}">
+                <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="包含流量:" />
+                    <TextBlock Text="{Binding TrafficByString}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="可用时长增加:" />
+                    <TextBlock Text="{Binding Duration}" />
+                    <TextBlock Text="天" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="带宽限制:" />
+                    <TextBlock Text="{Binding BandwidthLimitByString}" />
+                </StackPanel>
+                <StackPanel
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <StackPanel
+                        Margin="0,0,5,0"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock Text="{Binding Price}" />
+                        <TextBlock Text="￥" />
+                    </StackPanel>
+                    <Button Name="BuyButton" Click="BuyButton_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon
+                                Margin="0,0,5,0"
+                                FontSize="16"
+                                Glyph="&#xE7BF;" />
+                            <TextBlock Text="购买" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</UserControl>

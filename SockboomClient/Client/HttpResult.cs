@@ -35,6 +35,21 @@ namespace SockboomClient.Client
         [JsonProperty("traffic")]
         public string Traffic { get; set;}
 
+        public long TrafficByLong
+        {
+            get
+            {
+                try
+                {
+                    return Convert.ToInt64(Traffic);
+                }catch(Exception)
+                {
+                    return 0;
+                }
+                
+            }
+        }
+
         /// <summary>
         /// 通过订阅接口获取的订阅链接
         /// </summary>
@@ -47,6 +62,11 @@ namespace SockboomClient.Client
         [JsonProperty("pid")]
         public string Pid { get; set; }
         #endregion
+
+        /// <summary>
+        /// 异常传递
+        /// </summary>
+        public Exception Error { get; set; }
 
         public T Data { get; set; }
 

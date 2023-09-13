@@ -26,18 +26,26 @@ namespace SockboomClient.Client
             Dictionary<string, string> queryParams
             )
         {
-            string url = ClientUtils.GetUrl(path); // 获取对应接口地址
-            if (queryParams != null && queryParams.Count > 0)
+            try
             {
-                var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-                url += "?" + queryString;
-                AppLogger.LogDebug($"Request[type:GET] URL: {queryString}");
+                string url = ClientUtils.GetUrl(path); // 获取对应接口地址
+                if (queryParams != null && queryParams.Count > 0)
+                {
+                    var queryString = string.Join("&", queryParams.Select(kvp => $"{kvp.Key}={kvp.Value}"));
+                    url += "?" + queryString;
+                    AppLogger.LogDebug($"Request[type:GET] URL: {queryString}");
+                }
+
+
+                var response = await _httpClient.GetAsync(url);
+
+                return await AnalysisResponse<T>(response);
+            }catch(Exception ex)
+            {
+                AppLogger.LogError(ex.Message);
+                return await AnalysisResponse<T>(null,ex);
             }
-
-
-            var response = await _httpClient.GetAsync(url);
-
-            return await AnalysisResponse<T>(response);
+            
         }
 
         /// <summary>
@@ -56,9 +64,10 @@ namespace SockboomClient.Client
                 var response = await _httpClient.PostAsync(url, content); // 发送请求
                 return await AnalysisResponse<T>(response);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return await AnalysisResponse<T>(null);
+                AppLogger.LogError(ex.Message);
+                return await AnalysisResponse<T>(null,ex);
             }
 
             
@@ -71,18 +80,27 @@ namespace SockboomClient.Client
         /// <typeparam name="T"></typeparam>
         /// <param name="response"></param>
         /// <returns></returns>
-        private async static Task<HttpResult<T>> AnalysisResponse<T> (HttpResponseMessage? response)
+        private async static Task<HttpResult<T>> AnalysisResponse<T> (HttpResponseMessage? response, Exception? ex = null)
         {
             HttpResult<T> r = new HttpResult<T>();
+            if (ex != null)
+            {
+                r.Code = 418;
+                r.Message = ex.Message;
+                r.Error = ex;
+                return r;
+            }
+
             // 服务端 HTTP CODE 检测
             if (response?.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
-                AppLogger.LogDebug(responseContent); // Debug 级日志输出返回的数据
+                AppLogger.LogDebug(responseContent);
                 try
                 {
-                    var responseData = JsonConvert.DeserializeObject<HttpResult<T>>(responseContent); // 反序列化返回的数据
-                    if (responseData.Data != null)
+                    var responseData = JsonConvert.DeserializeObject<HttpResult<T>>(responseContent); // 反序列化
+
+                    if (responseData != null && responseData.Data != null)
                     {
                         AppLogger.LogDebug($"Response: {responseData.Data}");
                     }
@@ -90,19 +108,27 @@ namespace SockboomClient.Client
                     {
                         AppLogger.LogDebug($"Response: null");
                     }
+                    if(responseData == null)
+                    {
+                        throw new Exception();
+                    }
                     return responseData;
                 }
                 catch (Exception e)
                 {
-                    r.Code = 500;
+                    r.Code = 418;
                     r.Message = "客户端出现错误:" + e.Message;
-                    r.Data = default;
                     return r;
                 }
             }
-            r.Code = 500;
-            r.Message = "响应出现错误。请重试, 服务端状态码:" + response?.StatusCode;
-            r.Data = default;
+            if(response == null)
+            {
+                r.Code = 418;
+                r.Message = "响应出现错误, 请重试, 未收到响应";
+                return r;
+            }
+            r.Code = (int)response.StatusCode;
+            r.Message = "响应出现错误, 请重试, 服务端状态:" + response?.StatusCode;
             return r;
 
         }

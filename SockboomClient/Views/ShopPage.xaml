@@ -1,0 +1,143 @@
+﻿<Page
+    x:Class="SockboomClient.Views.ShopPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:SockboomClient.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Background="{ThemeResource ControlAltFillColorTransparentBrush}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <x:Double x:Key="CardSpacing">3</x:Double>
+
+        <Style
+            x:Key="SectionHeaderTextBlockStyle"
+            BasedOn="{StaticResource BodyStrongTextBlockStyle}"
+            TargetType="TextBlock">
+            <Style.Setters>
+                <Setter Property="Margin" Value="1,29,0,5" />
+            </Style.Setters>
+        </Style>
+
+        <Style x:Key="PanelStyle" TargetType="StackPanel">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="18" />
+            <Setter Property="Spacing" Value="{StaticResource CardSpacing}" />
+            <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefault}" />
+        </Style>
+    </Page.Resources>
+    <Grid x:Name="RootGrid" Loaded="RootGrid_Loaded">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            x:Name="PageHeader"
+            Margin="36,24,36,0"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="套餐购买" />
+        <ScrollViewer
+            x:Name="contentSV"
+            Grid.Row="1"
+            Padding="36,0,36,0"
+            IsTabStop="False"
+            UseSystemFocusVisuals="False"
+            VerticalScrollBarVisibility="Auto"
+            VerticalScrollMode="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Margin="0,0,28,0"
+                    Spacing="{StaticResource CardSpacing}">
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="VIP" />
+                    <InfoBar
+                        Name="VIPTipsInfo"
+                        Title="注意"
+                        Grid.Column="1"
+                        IsOpen="False"
+                        Message="您已是 VIP, 无需再次购买"
+                        Severity="Warning" />
+                    <Border
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <StackPanel Style="{StaticResource PanelStyle}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                    <FontIcon Margin="0,0,18,0" Glyph="&#xE735;" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock
+                                            FontSize="18"
+                                            FontWeight="Bold"
+                                            Text="VIP 权限" />
+                                        <TextBlock Text="时长:永久有效" />
+                                        <TextBlock Text="解锁VIP节点使用权" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                                    <Button
+                                        Name="VIPBuyButton"
+                                        Click="VIPBuyButton_Click"
+                                        IsEnabled="True">
+                                        <StackPanel>
+                                            <FontIcon Glyph="&#xE8C7;" />
+                                            <StackPanel>
+                                                <TextBlock HorizontalAlignment="Center" Text="购买" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Margin="0,0,28,30"
+                    VerticalAlignment="Top"
+                    Spacing="{StaticResource CardSpacing}">
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}" Text="套餐" />
+                    <InfoBar
+                        Title="提醒"
+                        IsOpen="True"
+                        Message="本页套餐数据均为硬编码数据，所有套餐价格应以 Sockboom 官网套餐价格为准"
+                        Severity="Informational">
+                        <InfoBar.ActionButton>
+                            <HyperlinkButton Content="查看 Sockboom 官网套餐" NavigateUri="https://sockboom.link/user/shop" />
+                        </InfoBar.ActionButton>
+
+                    </InfoBar>
+                    <Border
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                        <ScrollView
+                            x:Name="commoditySV"
+                            IsTabStop="False"
+                            UseSystemFocusVisuals="False"
+                            VerticalScrollBarVisibility="Auto"
+                            VerticalScrollMode="Auto">
+                            <StackPanel
+                                x:Name="commoditySVPanel"
+                                Width="Auto"
+                                Height="Auto"
+                                Orientation="Horizontal" />
+                        </ScrollView>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

@@ -6,24 +6,29 @@
     xmlns:icon="using:FluentIcons.Common"
     xmlns:local="using:SockboomClient"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Sockboom Third Client"
     mc:Ignorable="d">
-    <Grid>
-        <NavigationView x:Name="nvSample">
+    <Grid Loaded="Grid_Loaded">
+        <NavigationView
+            Name="navigationList"
+            Margin="0,48,0,0"
+            IsBackButtonVisible="Collapsed"
+            ItemInvoked="navigation_ItemInvoked">
             <NavigationView.MenuItems>
                 <NavigationViewItem
                     Content="代理状态"
                     Icon="Play"
-                    Tag="AccountInfo" />
+                    Tag="ProxyState" />
                 <NavigationViewItem
                     Content="用户信息"
                     Icon="ContactInfo"
-                    Tag="SamplePage2" />
-                <NavigationViewItem Content="充值余额" Tag="SamplePage3">
+                    Tag="UserInfo" />
+                <NavigationViewItem Content="充值余额" Tag="Recharging">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8C7;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Content="套餐购买" Tag="SamplePage4">
+                <NavigationViewItem Content="套餐购买" Tag="Shop">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE7BF;" />
                     </NavigationViewItem.Icon>
@@ -40,12 +45,22 @@
         <Border
             x:Name="AppTitleBar"
             Height="48"
-            Margin="48,0,0,0"
+            Margin="12,0,0,0"
             VerticalAlignment="Top">
-            <TextBlock
-                VerticalAlignment="Center"
-                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                Text="Sockboom Third Client" />
+            <StackPanel Orientation="Horizontal">
+                <FontIcon
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Glyph="&#xE703;" />
+
+                <TextBlock
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="Sockboom Third Client" />
+            </StackPanel>
+
         </Border>
     </Grid>
 

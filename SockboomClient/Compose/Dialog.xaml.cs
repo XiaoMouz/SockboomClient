@@ -13,20 +13,23 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
-
-namespace SockboomClient.Componse
+namespace SockboomClient.Compose
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// 对话框内容
     /// </summary>
     public sealed partial class Dialog : Page
     {
         public Dialog(string content)
         {
             this.InitializeComponent();
-            Content.Text = content;
+            ContentText.Text = content;
+        }
+        public Dialog(UIElement element,string content)
+        {
+            InitializeComponent();
+            ContentText.Text = content;
+            Content.Children.Add(element);
         }
     }
 }

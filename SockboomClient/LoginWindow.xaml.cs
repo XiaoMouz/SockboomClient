@@ -15,16 +15,17 @@ using SockboomClient.Client;
 using System.Collections.Generic;
 using SockboomClient.Model;
 using Microsoft.UI.Xaml.Controls;
-using SockboomClient.Componse;
-
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using SockboomClient.Compose;
+using static Vanara.PInvoke.Kernel32.REASON_CONTEXT;
+using SockboomClient.ViewModel;
+using Newtonsoft.Json.Linq;
+using SockboomClient.Config;
+using System.Net.Http;
 
 namespace SockboomClient
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// 登录窗口
     /// </summary>
     public sealed partial class LoginWindow : Window
     {
@@ -36,12 +37,47 @@ namespace SockboomClient
 
         private Helpers.SystemBackdrop backdrop;
 
+        private SharedViewModel _vm;
+
+        private string _startToken;
+
         public LoginWindow()
         {
             this.InitializeComponent();
-            this.SetWindowSize(500, 250);
+            InitWindowFancy();
+        }
 
-            #region 背景、样式与标题栏
+        /// <summary>
+        /// 自动登录
+        /// </summary>
+        /// <param name="token"></param>
+        public LoginWindow(string token)
+        {
+            this.InitializeComponent();
+            InitWindowFancy();
+            _startToken = token;
+        }
+
+        private void MainWindow_Closed(object sender, WindowEventArgs args)
+        {
+            // 保存窗口状态
+            var wpl = new User32.WINDOWPLACEMENT();
+            if (User32.GetWindowPlacement(hwnd, ref wpl))
+            {
+                ApplicationData.Current.LocalSettings.Values["IsLoginWindowMaximum"] = wpl.showCmd == ShowWindowCommand.SW_MAXIMIZE;
+                var p = appWindow.Position;
+                var s = appWindow.Size;
+                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
+                ApplicationData.Current.LocalSettings.Values["LoginWindowRect"] = rect.Value;
+            } 
+
+        }
+
+        #region 背景、样式与标题栏
+        private void InitWindowFancy()
+        {
+            this.SetWindowSize(500, 300);
+            _vm = SharedViewModel.GetInstance();
             // 设置云母或亚克力背景
             backdrop = new Helpers.SystemBackdrop(this);
             backdrop.TrySetMica(fallbackToAcrylic: true);
@@ -66,7 +102,7 @@ namespace SockboomClient
                 // 若窗口在屏幕范围之内
                 if (rect.Left > 0 && rect.Top > 0 && rect.Right < area.WorkArea.Width && rect.Bottom < area.WorkArea.Height)
                 {
-                    appWindow.MoveAndResize(rect.ToRectInt32());  
+                    appWindow.MoveAndResize(rect.ToRectInt32());
                 }
             }
 
@@ -83,25 +119,11 @@ namespace SockboomClient
                 var scale = (float)User32.GetDpiForWindow(hwnd) / 96;
                 // 48 这个值是应用标题栏的高度，不是唯一的，根据自己的 UI 设计而定
                 titleBar.SetDragRectangles(new RectInt32[] { new RectInt32((int)(48 * scale), 0, 10000, (int)(48 * scale)) });
-
             }
             else
             {
                 ExtendsContentIntoTitleBar = true;
                 SetTitleBar(AppTitleBar);
-            }
-        }
-        private void MainWindow_Closed(object sender, WindowEventArgs args)
-        {
-            // 保存窗口状态
-            var wpl = new User32.WINDOWPLACEMENT();
-            if (User32.GetWindowPlacement(hwnd, ref wpl))
-            {
-                ApplicationData.Current.LocalSettings.Values["IsLoginWindowMaximum"] = wpl.showCmd == ShowWindowCommand.SW_MAXIMIZE;
-                var p = appWindow.Position;
-                var s = appWindow.Size;
-                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
-                ApplicationData.Current.LocalSettings.Values["LoginWindowRect"] = rect.Value;
             }
         }
 
@@ -147,18 +169,17 @@ namespace SockboomClient
         }
         #endregion
 
-
         private async void LoginButton_OnClick(object sender, RoutedEventArgs e)
         {
+            SetElementStatus(false);
             var KeepLogin = KeepLoginCheckBox.IsChecked;
             var Email = LoginInput.Text;
             var Password = PasswordInput.Password;
-            SetElementStatu(false);
             // 检查邮箱和密码是否为空
             if (string.IsNullOrEmpty(Email) || string.IsNullOrEmpty(Password))
             {
                 ShowDialog("登录失败", "邮箱或密码不能为空");
-                SetElementStatu(true);
+                SetElementStatus(true);
                 return;
             }
             // 获取用户 Token
@@ -167,35 +188,34 @@ namespace SockboomClient
                 { "email" , Email },
                 { "passwd", Password }
             });
-            // 前端显示处理
             
+            GetUserAndSaveToVM(KeepLogin, Result.Token);
+        }
 
-            if (!Result.Success)
+        private void LoginByTokenButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            SetElementStatus(false);
+            var KeepLogin = KeepLoginCheckBox.IsChecked;
+            var Token = PasswordInput.Password;
+
+            // 检查Token是否为空
+            if (string.IsNullOrEmpty(Token))
             {
-                SetElementStatu(true);
-                // 登录失败
-                ShowDialog("登录失败", "邮箱或密码错误:" + Result.Code +"/" + Result.Message);
+                ShowDialog("登录失败", "你未填写 TOKEN (在密码一栏中填写 Token 即可，邮箱留空）");
+                SetElementStatus(true);
                 return;
             }
 
-            if (KeepLogin == true)
-            {
-                // 保存登录信息与是否自动登录
-                ApplicationData.Current.LocalSettings.Values["AutoLogin"] = "true";
-                ApplicationData.Current.LocalSettings.Values["Token"] = Result.Token;
-            }
+            GetUserAndSaveToVM(KeepLogin, Token);
 
-            var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", Result.Token } });
-            this.Hide();
-            new MainWindow(user.Data).Activate();
-            this.Close();
         }
+
         /// <summary>
         /// 在 false 时停用所有元素编辑功能, true 时启用
         /// false 时设置 ProgressRing 启用, 修改 Login Button 按钮文本, true 反之
         /// </summary>
         /// <param name="status"></param>
-        private void SetElementStatu(bool status)
+        private void SetElementStatus(bool status)
         {
             if (status)
             {
@@ -229,7 +249,60 @@ namespace SockboomClient
             dialog.PrimaryButtonText = "好";
             dialog.DefaultButton = ContentDialogButton.Primary;
             dialog.Content = new Dialog(message);
-            var result = await dialog.ShowAsync();
+            await dialog.ShowAsync();
+        }
+
+        /// <summary>
+        /// 获取用户信息并保存到 vm 单例
+        /// </summary>
+        /// <param name="keeplogin"></param>
+        /// <param name="token"></param>
+        private async void GetUserAndSaveToVM(bool? keeplogin, string token)
+        {
+            var user = await ApiClient.GetRequest<UserInfo>(Client.Apis.GetPaths.TRAFFIC, new Dictionary<string, string> { { "token", token } });
+            if (user.Success)
+            {
+                // 保存用户信息
+                _vm.UserInfo = user.Data;
+                _vm.UserInfo.Token = token;
+                await _vm.UserInfo.UpdateUserSub();
+                this.Hide();
+                new MainWindow().Activate();
+                this.Close();
+            }
+            else
+            {
+                // 登录失败
+                switch (user.Error.GetType().Name)
+                {
+                    case nameof(HttpRequestException): ShowDialog("登录失败", "网络错误，请检查网络连接与代理设置:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message); break;
+                    default: ShowDialog("登录失败", "账户密码或Token有误:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message);break;
+                }
+                
+                SetElementStatus(true);
+            }
+            if (keeplogin == true)
+            {
+                // 保存登录信息与是否自动登录
+                Settings.AutoLogin = true;
+                Settings.Token = token;
+            }
+        }
+
+        /// <summary>
+        ///  grid 加载后执行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            // 自动登录
+            if (_startToken != null)
+            {
+                PasswordInput.Password = _startToken;
+                LoginByTokenButton_OnClick(PasswordInput, null);
+            }
         }
     }
+    
 }

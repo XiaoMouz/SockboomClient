@@ -1,23 +1,25 @@
 ﻿using Microsoft.UI;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 using SockboomClient.Helpers;
 using SockboomClient.Model;
+using SockboomClient.Views;
 using System;
 using System.Runtime.InteropServices;
-using Vanara.PInvoke;
+using System.Threading.Tasks;
 using Windows.Graphics;
 using Windows.Storage;
-using WinRT.Interop;
 using WinUIEx;
-
-// To learn more about WinUI, the WinUI project structure,
-// and more about our project templates, see: http://aka.ms/winui-project-info.
+using WinRT;
+using WinRT.Interop;
+using SockboomClient.ViewModel;
+using SockboomClient.Config;
 
 namespace SockboomClient
 {
     /// <summary>
-    /// An empty window that can be used on its own or navigated to within a Frame.
+    /// 主窗体
     /// </summary>
     public sealed partial class MainWindow : Window
     {
@@ -29,15 +31,50 @@ namespace SockboomClient
 
         private Helpers.SystemBackdrop backdrop;
 
+        private SharedViewModel _vm;
+
         private UserInfo _user;
 
-        public MainWindow(UserInfo user)
+        [Obsolete]
+        public MainWindow()
         {
             this.InitializeComponent();
-            this.SetWindowSize(width: 1366, 750);
-            _user = user;
+            InitWindowFancy();
+            
+        }
 
-            #region 背景、样式与标题栏
+        #region 背景、样式与标题栏 与 最小窗口限制
+        private void MainWindow_Closed(object sender, WindowEventArgs args)
+        {
+            // 保存窗口状态
+            var wpl = new Vanara.PInvoke.User32.WINDOWPLACEMENT();
+            if (Vanara.PInvoke.User32.GetWindowPlacement(hwnd, ref wpl))
+            {
+                ApplicationData.Current.LocalSettings.Values["IsMainWindowMaximum"] = wpl.showCmd == Vanara.PInvoke.ShowWindowCommand.SW_MAXIMIZE;
+                var p = appWindow.Position;
+                var s = appWindow.Size;
+                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
+                ApplicationData.Current.LocalSettings.Values["MainWindowRect"] = rect.Value;
+            }
+        }
+
+        
+        private void InitWindowFancy()
+        {
+            this.SetWindowSize(width: 1366, 750);
+            _vm = SharedViewModel.GetInstance();
+            _user = _vm.UserInfo;
+            // 设置第一屏
+            navigationList.SelectedItem = FindMenuItemByTag(navigationList, "ProxyState");
+            contentFrame.Navigate(typeof(ClashConfigPage));
+            
+            //最小窗口限制
+            var manager = WinUIEx.WindowManager.Get(this);
+            manager.PersistenceId = "MainWindowPersistanceId";
+            manager.MinWidth = 657;
+            manager.MinHeight = 480;
+            manager.Backdrop = new WinUIEx.MicaSystemBackdrop();
+
             // 设置云母或亚克力背景
             backdrop = new Helpers.SystemBackdrop(this);
             backdrop.TrySetMica(fallbackToAcrylic: true);
@@ -52,7 +89,7 @@ namespace SockboomClient
             if (ApplicationData.Current.LocalSettings.Values["IsMainWindowMaximum"] is true)
             {
                 // 最大化
-                User32.ShowWindow(hwnd, ShowWindowCommand.SW_SHOWMAXIMIZED);
+                Vanara.PInvoke.User32.ShowWindow(hwnd, Vanara.PInvoke.ShowWindowCommand.SW_SHOWMAXIMIZED);
             }
             else if (ApplicationData.Current.LocalSettings.Values["MainWindowRect"] is ulong value)
             {
@@ -77,7 +114,7 @@ namespace SockboomClient
                 titleBar.ButtonBackgroundColor = Colors.Transparent;
                 titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
                 // 获取系统缩放率
-                var scale = (float)User32.GetDpiForWindow(hwnd) / 96;
+                var scale = (float)Vanara.PInvoke.User32.GetDpiForWindow(hwnd) / 96;
                 // 48 这个值是应用标题栏的高度，不是唯一的，根据自己的 UI 设计而定
                 titleBar.SetDragRectangles(new RectInt32[] { new RectInt32((int)(48 * scale), 0, 10000, (int)(48 * scale)) });
             }
@@ -86,21 +123,7 @@ namespace SockboomClient
                 ExtendsContentIntoTitleBar = true;
                 SetTitleBar(AppTitleBar);
             }
-        }
-        private void MainWindow_Closed(object sender, WindowEventArgs args)
-        {
-            // 保存窗口状态
-            var wpl = new User32.WINDOWPLACEMENT();
-            if (User32.GetWindowPlacement(hwnd, ref wpl))
-            {
-                ApplicationData.Current.LocalSettings.Values["IsMainWindowMaximum"] = wpl.showCmd == ShowWindowCommand.SW_MAXIMIZE;
-                var p = appWindow.Position;
-                var s = appWindow.Size;
-                var rect = new WindowRect(p.X, p.Y, s.Width, s.Height);
-                ApplicationData.Current.LocalSettings.Values["MainWindowRect"] = rect.Value;
-            }
-        }
-
+        }  
         /// <summary>
         /// RectInt32 和 ulong 相互转换
         /// </summary>
@@ -141,7 +164,71 @@ namespace SockboomClient
                 return new RectInt32(X, Y, Width, Height);
             }
         }
+
+
+
         #endregion
+
+        /// <summary>
+        /// 找到 NavigationView 中的选项
+        /// </summary>
+        /// <param name="list">Navigation</param>
+        /// <param name="tag">对应的 Tag</param>
+        /// <returns></returns>
+        private NavigationViewItem FindMenuItemByTag(NavigationView list, string tag)
+        {
+            foreach (NavigationViewItemBase item in list.MenuItems)
+            {
+                if (item is NavigationViewItem menuItem && menuItem.Tag.ToString() == tag)
+                {
+                    return menuItem;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Navigation View 选中项
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void navigation_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
+        {
+            //先判断是否选中了setting
+            if (args.IsSettingsInvoked)
+            {
+                contentFrame.Navigate(typeof(SettingsPage));
+            }
+            else
+            {
+                //选中项的内容
+                switch (args.InvokedItem)
+                {
+                    case "代理状态":
+                        contentFrame.Navigate(typeof(ClashConfigPage));
+                        break;
+                    case "用户信息":
+                        contentFrame.Navigate(typeof(AccountInfoPage));
+                        break;
+                    case "充值余额":
+                        contentFrame.Navigate(typeof(RechargePage));
+                        break;
+                    case "套餐购买":
+                        contentFrame.Navigate(typeof(ShopPage));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Settings.AutoCheckin)
+            {
+                _vm.CheckinRequest();
+            }
+        }
     }
 
 }
