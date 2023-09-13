@@ -7,10 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Background="Transparent"
     mc:Ignorable="d">
+    <StackPanel>
+        <TextBlock Name="ContentText" TextWrapping="Wrap" />
+        <StackPanel
+            Name="Content"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
+            <!--  Content body  -->
 
-    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <!--  Content body  -->
-        <TextBlock Name="Content" TextWrapping="Wrap" />
+        </StackPanel>
+
     </StackPanel>
 
 </Page>

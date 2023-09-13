@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "name": "月付-流量包1",
+    "traffic": 42949672960,
+    "bandwidthlimit": 0,
+    "duration": 30,
+    "price": 7.99
+  },
+  {
+    "id": 2,
+    "name": "VIP-永久有效",
+    "traffic": 0,
+    "bandwidthlimit": 0,
+    "duration": 0,
+    "price": 4.99
+  },
+  {
+    "id": 6,
+    "name": "月付-流量包2",
+    "traffic": 128849018880,
+    "bandwidthlimit": 0,
+    "duration": 30,
+    "price": 15.99
+  },
+  {
+    "id": 7,
+    "name": "月付-流量包3",
+    "traffic": 268435456000,
+    "bandwidthlimit": 0,
+    "duration": 30,
+    "price": 28.99
+  },
+  {
+    "id": 10,
+    "name": "季付-流量包",
+    "traffic": 386547056640,
+    "bandwidthlimit": 0,
+    "duration": 30,
+    "price": 39.99
+  },
+  {
+    "id": 8,
+    "name": "年付-流量包",
+    "traffic": 536870912000,
+    "bandwidthlimit": 0,
+    "duration": 365,
+    "price": 74.99
+  }
+]

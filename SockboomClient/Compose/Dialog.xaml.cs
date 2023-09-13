@@ -23,7 +23,13 @@ namespace SockboomClient.Compose
         public Dialog(string content)
         {
             this.InitializeComponent();
-            Content.Text = content;
+            ContentText.Text = content;
+        }
+        public Dialog(UIElement element,string content)
+        {
+            InitializeComponent();
+            ContentText.Text = content;
+            Content.Children.Add(element);
         }
     }
 }

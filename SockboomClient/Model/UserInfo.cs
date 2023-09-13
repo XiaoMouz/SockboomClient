@@ -35,7 +35,11 @@ namespace SockboomClient.Model
         /// 0: 普通用户; 1: VIP; 2: Staff
         /// </summary>
         [JsonProperty("class")]
-        private int _level;
+        public int _level
+        {
+            private set;
+            get;
+        }
         public string Level
         {
             get

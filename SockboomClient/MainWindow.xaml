@@ -6,6 +6,7 @@
     xmlns:icon="using:FluentIcons.Common"
     xmlns:local="using:SockboomClient"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Sockboom Third Client"
     mc:Ignorable="d">
     <Grid Loaded="Grid_Loaded">
         <NavigationView

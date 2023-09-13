@@ -29,6 +29,8 @@
     <WarningLevel>7</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="CommodityInfo.json" />
+    <None Remove="Compose\CommodityCard.xaml" />
     <None Remove="Compose\Dialog.xaml" />
     <None Remove="LoginWindow.xaml" />
     <None Remove="Views\AccountInfoPage.xaml" />
@@ -54,6 +56,18 @@
     <PackageReference Include="Vanara.PInvoke.User32" Version="3.4.16" />
     <PackageReference Include="WinUIEx" Version="2.2.0" />
     <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CommodityInfo.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Compose\CommodityCard.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 
   <ItemGroup>
