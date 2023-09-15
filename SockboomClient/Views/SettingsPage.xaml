@@ -117,7 +117,10 @@
 
                 <!--  About  -->
                 <TextBlock Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" Text="关于" />
-                <toolkit:SettingsExpander Description="© 2023 XiaoMouz. All rights reserved." Header="Sockboom Client">
+                <toolkit:SettingsExpander
+                    Margin="0,0,0,10"
+                    Description="© 2023 XiaoMouz. All rights reserved."
+                    Header="Sockboom Client">
                     <toolkit:SettingsExpander.HeaderIcon>
                         <BitmapIcon ShowAsMonochrome="False" UriSource="/Images/StoreLogo.png" />
                     </toolkit:SettingsExpander.HeaderIcon>
@@ -147,6 +150,10 @@
                                 <FontIcon Glyph="&#xE8A7;" />
                             </toolkit:SettingsCard.ActionIcon>
                         </toolkit:SettingsCard>
+                        <toolkit:SettingsCard
+                            x:Name="AppCenterWorkingCard"
+                            Header="App Center 工作中"
+                            Visibility="Collapsed" />
                     </toolkit:SettingsExpander.Items>
                 </toolkit:SettingsExpander>
             </StackPanel>

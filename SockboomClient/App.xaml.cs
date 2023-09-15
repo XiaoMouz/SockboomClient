@@ -1,4 +1,7 @@
-﻿using Microsoft.UI.Xaml;
+﻿using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Microsoft.AppCenter;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -19,6 +22,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using SockboomClient.Debuger;
 
 namespace SockboomClient
 {
@@ -36,9 +40,21 @@ namespace SockboomClient
 
         protected override async void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
+            string secret = Environment.GetEnvironmentVariable("APP_CENTER_SECRET");
+            if (secret != null)
+            {
+                AppCenter.Start(secret,
+                  typeof(Analytics), typeof(Crashes));
+                AppLogger.LogInfo("Enabled App center analytics");
+            }
+            else
+            {
+                AppLogger.LogWarn("Disabled App center analytics");
+            }
+
             if (Settings.AutoLogin)
             {
-
+                AppLogger.LogInfo("AutoLogin is enable, Start login progress");
                 var Token = Settings.Token;
                 m_window = new LoginWindow(Token);
 

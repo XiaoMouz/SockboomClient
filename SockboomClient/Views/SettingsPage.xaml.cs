@@ -12,6 +12,7 @@ using Windows.System;
 using SockboomClient.ViewModel;
 using SockboomClient.Compose;
 using System.Threading;
+using Microsoft.AppCenter;
 
 namespace SockboomClient.Views
 {
@@ -43,7 +44,7 @@ namespace SockboomClient.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnSettingsPageLoaded(object sender, RoutedEventArgs e)
+        private async void OnSettingsPageLoaded(object sender, RoutedEventArgs e)
         {
             // 主题设置
             var currentTheme = Settings.Theme;
@@ -69,6 +70,11 @@ namespace SockboomClient.Views
             else
             {
                 AutoCheckinSwitch.IsOn = false;
+            }
+
+            if(await AppCenter.IsEnabledAsync())
+            {
+                AppCenterWorkingCard.Visibility = Visibility.Visible;
             }
         }
 
