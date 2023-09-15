@@ -188,6 +188,12 @@ namespace SockboomClient
                 { "email" , Email },
                 { "passwd", Password }
             });
+            if (!Result.Success)
+            {
+                ShowDialog("登录失败", "邮箱或密码错误:"+Result.Code);
+                SetElementStatus(true); 
+                return;
+            }
             
             GetUserAndSaveToVM(KeepLogin, Result.Token);
         }
@@ -269,14 +275,26 @@ namespace SockboomClient
                 this.Hide();
                 new MainWindow().Activate();
                 this.Close();
+                return;
             }
             else
             {
                 // 登录失败
-                switch (user.Error.GetType().Name)
+                if(user.Error != null)
                 {
-                    case nameof(HttpRequestException): ShowDialog("登录失败", "网络错误，请检查网络连接与代理设置:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message); break;
-                    default: ShowDialog("登录失败", "账户密码或Token有误:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message);break;
+                    switch (user.Error.GetType().Name)
+                    {
+                        case nameof(HttpRequestException): ShowDialog("登录失败", "网络错误，请检查网络连接与代理设置:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message); break;
+                        default: ShowDialog("登录失败", "账户密码或Token有误:" + user.Code + "/" + user.Error.GetType() + ":" + user.Message); break;
+                    }
+                }
+                if(user.Code == 0)
+                {
+                    ShowDialog("登录失败", "未知错误:" + user.Code);
+                }
+                if(user.Code == -1)
+                {
+                    ShowDialog("登录失败", "Token 错误:" + user.Code);
                 }
                 
                 SetElementStatus(true);

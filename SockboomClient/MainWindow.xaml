@@ -13,6 +13,7 @@
             Name="navigationList"
             Margin="0,48,0,0"
             IsBackButtonVisible="Collapsed"
+            IsPaneOpen="False"
             ItemInvoked="navigation_ItemInvoked">
             <NavigationView.MenuItems>
                 <NavigationViewItem

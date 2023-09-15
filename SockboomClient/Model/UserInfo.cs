@@ -37,7 +37,7 @@ namespace SockboomClient.Model
         [JsonProperty("class")]
         public int _level
         {
-            private set;
+            set;
             get;
         }
         public string Level
@@ -106,13 +106,27 @@ namespace SockboomClient.Model
             {
                 return GetStringValue(Total);
             }
-        } 
+        }
 
         /// <summary>
         /// 用户流量有效期 (单位: 天)
         /// </summary>
         [JsonProperty("days")]
-        public int Days { get; set; }
+        private double _days
+        {
+            set;
+            get;
+        }
+        
+        public double Days {
+            set { 
+                _days = value;
+            } 
+            get
+            {
+                return Math.Round(_days, 0);
+            }
+        }
 
         /// <summary>
         /// 用户账户余额
